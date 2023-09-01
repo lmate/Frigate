@@ -15,42 +15,6 @@ const testData = [
   ], [
     {type: 'p', value: 'valami3', x: 20, y: 20},
     {type: 'p', value: 'valami4', x: 30, y: 30}
-  ], [
-    {type: 'p', value: 'valami3', x: 20, y: 20},
-    {type: 'p', value: 'valami4', x: 30, y: 30}
-  ], [
-    {type: 'p', value: 'valami3', x: 20, y: 20},
-    {type: 'p', value: 'valami4', x: 30, y: 30}
-  ], [
-    {type: 'p', value: 'valami1', x: 10, y: 10},
-    {type: 'p', value: 'valami2', x: 90, y: 50}
-  ], [
-    {type: 'p', value: 'valami3', x: 20, y: 20},
-    {type: 'p', value: 'valami4', x: 30, y: 30}
-  ], [
-    {type: 'p', value: 'valami3', x: 20, y: 20},
-    {type: 'p', value: 'valami4', x: 30, y: 30}
-  ], [
-    {type: 'p', value: 'valami3', x: 20, y: 20},
-    {type: 'p', value: 'valami4', x: 30, y: 30}
-  ], [
-    {type: 'p', value: 'valami3', x: 20, y: 20},
-    {type: 'p', value: 'valami4', x: 30, y: 30}
-  ], [
-    {type: 'p', value: 'valami1', x: 10, y: 10},
-    {type: 'p', value: 'valami2', x: 90, y: 50}
-  ], [
-    {type: 'p', value: 'valami3', x: 20, y: 20},
-    {type: 'p', value: 'valami4', x: 30, y: 30}
-  ], [
-    {type: 'p', value: 'valami3', x: 20, y: 20},
-    {type: 'p', value: 'valami4', x: 30, y: 30}
-  ], [
-    {type: 'p', value: 'valami3', x: 20, y: 20},
-    {type: 'p', value: 'valami4', x: 30, y: 30}
-  ], [
-    {type: 'p', value: 'valami3', x: 20, y: 20},
-    {type: 'p', value: 'valami4', x: 30, y: 30}
   ]
 ];
 
@@ -60,7 +24,7 @@ function Editor() {
 
   return (
     <>
-      <SlideStrip slides={slides} currentSlide={currentSlide} setCurrentSlide={(setIndex) => {setCurrentSlide(setIndex)}}/>
+      <SlideStrip slides={slides} currentSlide={currentSlide} setCurrentSlide={(setIndex) => {setCurrentSlide(setIndex)}} setSlides={(slides) => {setSlides(slides)}}/>
       <Chat />
       <MenuBar />
       <SlideEditor slides={slides} currentSlide={currentSlide}/>

@@ -110,9 +110,11 @@ body {
 
 .SlidesAdd > button:active {
   transform: scale(0.98);
-  /* Scaling button to 0.98 to its original size */
   box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-  /* Lowering the shadow */
+}
+
+.SlideStrip > div:nth-of-type(1), .SlideStrip > div:nth-last-of-type(1), .SlideStrip > div:nth-last-of-type(2), .SlideStrip > div:nth-last-of-type(3) {
+  cursor: default;
 }
 
 .MenuBar {
@@ -138,6 +140,10 @@ body {
   height: 100%;
   border-radius: 1vw;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
+}
+
+.moveable {
+  border: 2px dashed var(--primary);
 }
 
 .ToolBar {

@@ -19,6 +19,14 @@ function SlideStrip(props) {
     props.setCurrentSlide(selectedIndex);
   }
 
+  function handleAddNewSlide() {
+    const updatedSlides = structuredClone(props.slides);
+    updatedSlides.push([]);
+    props.setSlides(updatedSlides);
+    props.setCurrentSlide(updatedSlides.length - 1);
+    document.querySelector('.SlidesBottom').scrollIntoView({ behavior: "smooth"});
+  }
+
   return (
     <div className="SlideStrip">
       <div className="SlidesLogo"><img src={logo} /></div>
@@ -31,7 +39,8 @@ function SlideStrip(props) {
         </div>
       ))}
       <div></div>
-      <div className='SlidesAdd'><button>+</button></div>
+      <div className='SlidesBottom'></div>
+      <div className='SlidesAdd'><button onClick={handleAddNewSlide}>+</button></div>
     </div>
   )
 }
