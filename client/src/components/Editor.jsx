@@ -7,14 +7,14 @@ import ToolBar from "./ToolBar";
 
 const testData = [
   [
-    {type: 'p', value: 'valami1', x: 10, y: 10},
-    {type: 'p', value: 'valami2', x: 90, y: 50}
+    {type: 'p', value: 'valami1', x: 10, y: 10, w: 10, h: 10},
+    {type: 'p', value: 'valami2', x: 90, y: 50, w: 10, h: 10}
   ], [
-    {type: 'p', value: 'valami3', x: 20, y: 20},
-    {type: 'p', value: 'valami4', x: 30, y: 30}
+    {type: 'p', value: 'valami3', x: 20, y: 20, w: 10, h: 10},
+    {type: 'p', value: 'valami4', x: 30, y: 30, w: 10, h: 10}
   ], [
-    {type: 'p', value: 'valami3', x: 20, y: 20},
-    {type: 'p', value: 'valami4', x: 30, y: 30}
+    {type: 'p', value: 'valami3', x: 20, y: 20, w: 10, h: 10},
+    {type: 'p', value: 'valami4', x: 30, y: 30, w: 10, h: 10}
   ]
 ];
 

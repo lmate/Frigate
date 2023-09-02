@@ -1,6 +1,12 @@
 import interact from 'interactjs';
 import { useState } from 'react';
 
+let dragingX = 0;
+let dragingY = 0;
+
+const percentFromPxX = (px) => (px / parseFloat(document.querySelector('.SlideEditor > div').offsetWidth)) * 100;
+const percentFromPxY = (px) => (px / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 56.25;
+
 function generateElement(element, index, handleElementSelection) {
   switch (element.type) {
     case 'p':
@@ -14,8 +20,26 @@ function generateElement(element, index, handleElementSelection) {
   }
 }
 
-let dragingX = 0;
-let dragingY = 0;
+function convertElementPixelToPercentage(elementIndex) {
+  // Transform values to percentages after resize
+  if (document.querySelector(`#e${elementIndex}`).getAttribute('data-x') !== '0') {
+    document.querySelector(`#e${elementIndex}`).style.marginLeft = (parseFloat(document.querySelector(`#e${elementIndex}`).style.marginLeft) + percentFromPxX(parseFloat(document.querySelector(`#e${elementIndex}`).getAttribute('data-x')))) + '%';
+  }
+  if (document.querySelector(`#e${elementIndex}`).getAttribute('data-y') !== '0') {
+    document.querySelector(`#e${elementIndex}`).style.marginTop = (parseFloat(document.querySelector(`#e${elementIndex}`).style.marginTop) + percentFromPxY(parseFloat(document.querySelector(`#e${elementIndex}`).getAttribute('data-y')))) + '%';
+  }
+
+  if (!document.querySelector(`#e${elementIndex}`).style.width.includes('%')) {
+    document.querySelector(`#e${elementIndex}`).style.width = percentFromPxX(parseFloat(document.querySelector(`#e${elementIndex}`).style.width)) + '%';
+  }
+  if (!document.querySelector(`#e${elementIndex}`).style.height.includes('%')) {
+    document.querySelector(`#e${elementIndex}`).style.height = (parseFloat(document.querySelector(`#e${elementIndex}`).style.height) / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 100 + '%';
+  }
+
+  document.querySelector(`#e${elementIndex}`).style.removeProperty('transform');
+  document.querySelector(`#e${elementIndex}`).removeAttribute('data-x');
+  document.querySelector(`#e${elementIndex}`).removeAttribute('data-y');
+}
 
 function SlideEditor(props) {
   const [selectedElement, setSelectedElement] = useState(null);
@@ -27,6 +51,9 @@ function SlideEditor(props) {
     });
     dragingX = 0;
     dragingY = 0;
+
+    convertElementPixelToPercentage(index);
+
     document.querySelector(`#e${index}`).className = 'moveable';
     setSelectedElement(index);
   }
@@ -54,47 +81,20 @@ function SlideEditor(props) {
     modifiers: [
       interact.modifiers.restrictEdges({ outer: 'parent' })
     ],
-    inertia: true
+    inertia: false
   }).draggable({
     listeners: {
       move(event) {
-
-        //let x = parseInt(event.target.style.marginLeft);
-        //let y = parseInt(event.target.style.marginTop);
-
         if (dragingX === 0) {
-
-          // TODO: The positioning when first selecting an element is not right, after the first drag, everyhing is good,
-          // but the first drag, has to start from an accurate position, which it does not... Fucker...
-          // (also, snapback from outside the div, is also not accurate)
-
-          console.log(event.target.getBoundingClientRect().x - event.clientX);
-
-          let xDistanceFromOrigin = (((event.target.getBoundingClientRect().x - event.clientX) / document.querySelector('.SlideEditor > div').offsetWidth) * 100);
-          let yDistanceFromOrigin = (((event.target.getBoundingClientRect().y - event.clientY) / document.querySelector('.SlideEditor > div').offsetHeight) * 55);
-          console.log(xDistanceFromOrigin)
-
-          dragingX = ((event.clientX / document.querySelector('.SlideEditor > div').offsetWidth) * 100) - 16;
-          dragingY = ((event.clientY / document.querySelector('.SlideEditor > div').offsetHeight) * 55) - 10;
-
-          dragingX -= Math.abs(xDistanceFromOrigin);
-          dragingY -= Math.abs(yDistanceFromOrigin);
-
-          console.log(dragingX)
-
-
-          //dragingX -= dragingX / 1.5;
-          //dragingY -= dragingY / 1.5;
+          const editorCoords = document.querySelector('.SlideEditor > div').getBoundingClientRect();
+          const targetCoords = event.target.getBoundingClientRect();
+          dragingX = percentFromPxX(event.clientX0) - percentFromPxX(editorCoords.x) - percentFromPxX(event.clientX0 - targetCoords.x);
+          dragingY = percentFromPxY(event.clientY0) - percentFromPxY(editorCoords.y) - percentFromPxY(event.clientY0 - targetCoords.y);
         }
-
-        dragingX += (event.dx / document.querySelector('.SlideEditor > div').offsetWidth) * 100;
-        dragingY += (event.dy / document.querySelector('.SlideEditor > div').offsetHeight) * 55;
-        
+        dragingX += percentFromPxX(event.dx);
+        dragingY += percentFromPxY(event.dy);
         event.target.style.marginLeft = dragingX + '%';
         event.target.style.marginTop = dragingY + '%';
-
-        //event.target.style.marginLeft = (document.querySelector('.SlideEditor > div').offsetWidth - x) / document.querySelector('.SlideEditor > div').offsetWidth + '%';
-        //event.target.style.marginTop = (document.querySelector('.SlideEditor > div').offsetHeight - y) / document.querySelector('.SlideEditor > div').offsetHeight + '%';
       },
     },
     inertia: true,
@@ -105,16 +105,6 @@ function SlideEditor(props) {
       })
     ]
   });
-  /*
-  if (document.querySelector('.moveable')) {
-    document.querySelector('.moveable').addEventListener('mousemove', (e) => {
-      if (e.buttons === 1) {
-        console.log('huzogat');
-        console.log(e)
-        e.target.style.marginLeft = e.offsetX;
-      }
-    });
-  }*/
 
   return (
     <div className="SlideEditor">

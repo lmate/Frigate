@@ -3,7 +3,7 @@ import logo from '../assets/logo.svg';
 function generateElement(element, index) {
   switch (element.type) {
     case 'p':
-      return <p key={index} style={{
+      return <p key={element.value + index + 'mini'} style={{
         position: 'absolute',
         marginLeft: element.x + '%',
         marginTop: element.y + '%',
