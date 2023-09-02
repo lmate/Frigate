@@ -9,6 +9,7 @@ body {
   margin: 1vw;
   background-color: var(--bg);
   font-family: 'Montserrat', sans-serif;
+  overflow-y: hidden;
 }
 
 .SlideStrip {
@@ -142,8 +143,16 @@ body {
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
 }
 
-.moveable {
-  border: 2px dashed var(--primary);
+.SlideEditor > div > textarea {
+  position: absolute;
+  resize: none;
+  border: 0px solid black;
+  outline: none;
+  background-color: transparent;
+}
+
+.selectedElement {
+  border: 2px dashed var(--primary) !important;
   z-index: 999;
 }
 

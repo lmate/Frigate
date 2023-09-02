@@ -1,5 +1,5 @@
 import interact from 'interactjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 let dragingX = 0;
 let dragingY = 0;
@@ -7,58 +7,79 @@ let dragingY = 0;
 const percentFromPxX = (px) => (px / parseFloat(document.querySelector('.SlideEditor > div').offsetWidth)) * 100;
 const percentFromPxY = (px) => (px / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 56.25;
 
-function generateElement(element, index, handleElementSelection) {
+function generateElement(element, index) {
   switch (element.type) {
-    case 'p':
-      return <p key={element.value + index} id={`e${index}`} onClick={() => { handleElementSelection(index) }} style={{
-        position: 'absolute',
+    case 'text':
+      return <textarea key={element.value + index} defaultValue={element.value} id={`e${index}`} onClick={() => { handleElementSelection(index) }} style={{
         marginLeft: element.x + '%',
         marginTop: element.y + '%',
-        width: element.w + '%',
-        height: element.h + '%'
-      }}>{element.value}</p>
+        width: element.w + '%'
+      }} />
   }
 }
 
 function convertElementPixelToPercentage(elementIndex) {
-  // Transform values to percentages after resize
-  if (document.querySelector(`#e${elementIndex}`).getAttribute('data-x') !== '0') {
-    document.querySelector(`#e${elementIndex}`).style.marginLeft = (parseFloat(document.querySelector(`#e${elementIndex}`).style.marginLeft) + percentFromPxX(parseFloat(document.querySelector(`#e${elementIndex}`).getAttribute('data-x')))) + '%';
+  const targetElement = document.querySelector(`#e${elementIndex}`);
+  resizeTextareaToFitAllText(targetElement);
+
+  if (targetElement.getAttribute('data-x') !== '0') {
+    targetElement.style.marginLeft = (parseFloat(targetElement.style.marginLeft) + percentFromPxX(parseFloat(targetElement.getAttribute('data-x')))) + '%';
   }
-  if (document.querySelector(`#e${elementIndex}`).getAttribute('data-y') !== '0') {
-    document.querySelector(`#e${elementIndex}`).style.marginTop = (parseFloat(document.querySelector(`#e${elementIndex}`).style.marginTop) + percentFromPxY(parseFloat(document.querySelector(`#e${elementIndex}`).getAttribute('data-y')))) + '%';
+  if (targetElement.getAttribute('data-y') !== '0') {
+    targetElement.style.marginTop = (parseFloat(targetElement.style.marginTop) + percentFromPxY(parseFloat(targetElement.getAttribute('data-y')))) + '%';
   }
 
-  if (!document.querySelector(`#e${elementIndex}`).style.width.includes('%')) {
-    document.querySelector(`#e${elementIndex}`).style.width = percentFromPxX(parseFloat(document.querySelector(`#e${elementIndex}`).style.width)) + '%';
+  if (!targetElement.style.width.includes('%')) {
+    targetElement.style.width = percentFromPxX(parseFloat(targetElement.style.width)) + '%';
   }
-  if (!document.querySelector(`#e${elementIndex}`).style.height.includes('%')) {
-    document.querySelector(`#e${elementIndex}`).style.height = (parseFloat(document.querySelector(`#e${elementIndex}`).style.height) / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 100 + '%';
+  if (!targetElement.style.height.includes('%')) {
+    targetElement.style.height = (parseFloat(targetElement.style.height) / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 100 + '%';
   }
 
-  document.querySelector(`#e${elementIndex}`).style.removeProperty('transform');
-  document.querySelector(`#e${elementIndex}`).removeAttribute('data-x');
-  document.querySelector(`#e${elementIndex}`).removeAttribute('data-y');
+  targetElement.style.removeProperty('transform');
+  targetElement.removeAttribute('data-x');
+  targetElement.removeAttribute('data-y');
+}
+
+function resizeTextareaToFitAllText(target) {
+  if (target.tagName === 'TEXTAREA') {
+    target.style.height = '0';
+    target.style.height = target.scrollHeight + 'px';
+  }
+}
+
+function handleElementSelection(index) {
+  console.log(index);
+  document.querySelectorAll('.selectedElement').forEach((element) => {
+    element.classList.remove('selectedElement');
+  });
+  dragingX = 0;
+  dragingY = 0;
+
+  convertElementPixelToPercentage(index);
+
+  document.querySelector(`#e${index}`).className = 'selectedElement';
+
+  document.querySelector('.selectedElement').addEventListener('input', (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      e.target.focus();
+    }
+    convertElementPixelToPercentage(index);
+  });
 }
 
 function SlideEditor(props) {
-  const [selectedElement, setSelectedElement] = useState(null);
+  
+  // Size all texarea properly, when loading
+  useEffect(() => {
+    props.slides[props.currentSlide].forEach((element, index) => {
+      resizeTextareaToFitAllText(document.querySelector(`#e${index}`))
+    })
+  }, [props.currentSlide]);
 
-  function handleElementSelection(index) {
-    console.log(index);
-    document.querySelectorAll('.moveable').forEach((element) => {
-      element.classList.remove('moveable');
-    });
-    dragingX = 0;
-    dragingY = 0;
-
-    convertElementPixelToPercentage(index);
-
-    document.querySelector(`#e${index}`).className = 'moveable';
-    setSelectedElement(index);
-  }
-
-  interact('.moveable').resizable({
+  interact('.selectedElement').resizable({
+    // TODO: disable bottom and top resizing, if its a textarea
     edges: { left: true, right: true, bottom: true, top: true },
     listeners: {
       move(event) {
@@ -109,7 +130,7 @@ function SlideEditor(props) {
   return (
     <div className="SlideEditor">
       <div>
-        {props.slides && props.slides[props.currentSlide].map((element, index) => generateElement(element, index, handleElementSelection))}
+        {props.slides && props.slides[props.currentSlide].map((element, index) => generateElement(element, index))}
       </div>
     </div>
   )

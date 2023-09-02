@@ -2,14 +2,12 @@ import logo from '../assets/logo.svg';
 
 function generateElement(element, index) {
   switch (element.type) {
-    case 'p':
-      return <p key={element.value + index + 'mini'} style={{
-        position: 'absolute',
+    case 'text':
+      return <textarea key={element.value + index + 'mini'} defaultValue={element.value} style={{
         marginLeft: element.x + '%',
         marginTop: element.y + '%',
-        width: element.w+'%',
-        height: element.h+'%'
-      }}>{element.value}</p>
+        width: element.w+'%'
+      }} />
   }
 }
 
