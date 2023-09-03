@@ -56,21 +56,36 @@ function handleElementSelection(index) {
   dragingX = 0;
   dragingY = 0;
 
-  convertElementPixelToPercentage(index);
-
-  document.querySelector(`#e${index}`).className = 'selectedElement';
-
-  document.querySelector('.selectedElement').addEventListener('input', (e) => {
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      e.target.focus();
-    }
+  if (index !== -1) {
     convertElementPixelToPercentage(index);
-  });
+
+    document.querySelector(`#e${index}`).className = 'selectedElement';
+
+    // Set what sides are resizeable, based on element type
+    if (document.querySelector(`#e${index}`).tagName === 'TEXTAREA') {
+      interact('.selectedElement').options.resize.edges = { left: true, right: true, bottom: false, top: false };
+    } else {
+      interact('.selectedElement').options.resize.edges = { left: true, right: true, bottom: true, top: true };
+    }
+
+    document.querySelector('.selectedElement').addEventListener('input', (e) => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        e.target.focus();
+      }
+      convertElementPixelToPercentage(index);
+    });
+  }
+}
+
+function handleDeselectEverything(e) {
+  if (e.target.tagName === 'DIV') {
+    handleElementSelection(-1);
+  }
 }
 
 function SlideEditor(props) {
-  
+
   // Size all texarea properly, when loading
   useEffect(() => {
     props.slides[props.currentSlide].forEach((element, index) => {
@@ -79,7 +94,6 @@ function SlideEditor(props) {
   }, [props.currentSlide]);
 
   interact('.selectedElement').resizable({
-    // TODO: disable bottom and top resizing, if its a textarea
     edges: { left: true, right: true, bottom: true, top: true },
     listeners: {
       move(event) {
@@ -129,7 +143,7 @@ function SlideEditor(props) {
 
   return (
     <div className="SlideEditor">
-      <div>
+      <div onClick={handleDeselectEverything}>
         {props.slides && props.slides[props.currentSlide].map((element, index) => generateElement(element, index))}
       </div>
     </div>
