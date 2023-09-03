@@ -3,11 +3,11 @@ import logo from '../assets/logo.svg';
 function generateElement(element, index) {
   switch (element.type) {
     case 'text':
-      return <textarea key={element.value + index + 'mini'} defaultValue={element.value} style={{
+      return <p key={element.value + index + 'mini'} style={{
         marginLeft: element.x + '%',
         marginTop: element.y + '%',
         width: element.w+'%'
-      }} />
+      }}>{element.value}</p>
   }
 }
 

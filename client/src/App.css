@@ -43,6 +43,7 @@ body {
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.3);
   border-radius: 3vw;
   margin-left: 2vw;
+  pointer-events: none;
 }
 
 .SlideStrip > div > p {
@@ -143,13 +144,16 @@ body {
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
 }
 
-.SlideEditor > div > textarea {
+.SlideEditor > div > textarea, .SlideStrip > div > div > p {
   position: absolute;
   resize: none;
   border: 0px solid black;
   outline: none;
   background-color: transparent;
   cursor: pointer;
+  white-space: pre-line;
+  font-size: 18pt;
+  padding: .2vw;
 }
 
 .selectedElement {
@@ -164,6 +168,42 @@ body {
   background-color: var(--elementbg);
   border-bottom-left-radius: 1vw;
   border-bottom-right-radius: 1vw;
+}
+
+.ToolBar > div {
+  float: left;
+  margin-top: .6vh;
+  margin-left: 1vw;
+  width: 5vh;
+  height: 5vh;
+  background-color: var(--bg);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
+  border-radius: .5vw;
+  cursor: pointer;
+}
+
+.ToolBar > div > img {
+  width: 2.5vh;
+  height: 2.5vh;
+  margin-left: 1.25vh;
+  margin-top: 1.25vh;
+  filter: invert(51%) sepia(16%) saturate(190%) hue-rotate(172deg) brightness(98%) contrast(91%);
+}
+
+.ToolBar > div:hover {
+  box-sizing: border-box;
+  border: 2px solid var(--primary);
+}
+
+.ToolBar > div:hover > img {
+  filter: invert(23%) sepia(93%) saturate(2345%) hue-rotate(210deg) brightness(95%) contrast(96%);
+  margin-left: calc(1.25vh - 2px);
+  margin-top: calc(1.25vh - 2px);
+}
+
+.ToolBar > div:active {
+  transform: scale(0.98);
+  box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
 }
 
 .ElementSettings {

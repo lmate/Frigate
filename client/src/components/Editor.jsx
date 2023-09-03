@@ -27,8 +27,8 @@ function Editor() {
       <SlideStrip slides={slides} currentSlide={currentSlide} setCurrentSlide={(setIndex) => {setCurrentSlide(setIndex)}} setSlides={(slides) => {setSlides(slides)}}/>
       <ElementSettings />
       <MenuBar />
-      <SlideEditor slides={slides} currentSlide={currentSlide}/>
-      <ToolBar />
+      <SlideEditor slides={slides} currentSlide={currentSlide} setCurrentSlide={(setIndex) => {setCurrentSlide(setIndex)}} setSlides={(slides) => {setSlides(slides)}}/>
+      <ToolBar slides={slides} currentSlide={currentSlide} setSlides={(slides) => {setSlides(slides)}}/>
     </>
   )
 }

@@ -7,92 +7,125 @@ let dragingY = 0;
 const percentFromPxX = (px) => (px / parseFloat(document.querySelector('.SlideEditor > div').offsetWidth)) * 100;
 const percentFromPxY = (px) => (px / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 56.25;
 
-function generateElement(element, index) {
-  switch (element.type) {
-    case 'text':
-      return <textarea key={element.value + index} defaultValue={element.value} id={`e${index}`} onClick={() => { handleElementSelection(index) }} spellCheck="false" style={{
-        marginLeft: element.x + '%',
-        marginTop: element.y + '%',
-        width: element.w + '%'
-      }} />
-  }
-}
-
-function convertElementPixelToPercentage(elementIndex) {
-  const targetElement = document.querySelector(`#e${elementIndex}`);
-  resizeTextareaToFitAllText(targetElement);
-
-  if (targetElement.getAttribute('data-x') !== '0') {
-    targetElement.style.marginLeft = (parseFloat(targetElement.style.marginLeft) + percentFromPxX(parseFloat(targetElement.getAttribute('data-x')))) + '%';
-  }
-  if (targetElement.getAttribute('data-y') !== '0') {
-    targetElement.style.marginTop = (parseFloat(targetElement.style.marginTop) + percentFromPxY(parseFloat(targetElement.getAttribute('data-y')))) + '%';
-  }
-
-  if (!targetElement.style.width.includes('%')) {
-    targetElement.style.width = percentFromPxX(parseFloat(targetElement.style.width)) + '%';
-  }
-  if (!targetElement.style.height.includes('%')) {
-    targetElement.style.height = (parseFloat(targetElement.style.height) / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 100 + '%';
-  }
-
-  targetElement.style.removeProperty('transform');
-  targetElement.removeAttribute('data-x');
-  targetElement.removeAttribute('data-y');
-}
-
-function resizeTextareaToFitAllText(target) {
-  if (target.tagName === 'TEXTAREA') {
-    target.style.height = '0';
-    target.style.height = (parseFloat(target.scrollHeight) / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 100 + '%';
-  }
-}
-
-function handleElementSelection(index) {
-  console.log(index);
-  document.querySelectorAll('.selectedElement').forEach((element) => {
-    element.classList.remove('selectedElement');
-  });
-  dragingX = 0;
-  dragingY = 0;
-
-  if (index !== -1) {
-    document.querySelector(`#e${index}`).className = 'selectedElement';
-    convertElementPixelToPercentage(index);
-    setResizableSides(index);
-
-    document.querySelector('.selectedElement').addEventListener('input', (e) => {
-      if (e.key === 'Tab') {
-        e.preventDefault();
-        e.target.focus();
-      }
-      convertElementPixelToPercentage(index);
-    });
-  }
-}
-
-function handleDeselectEverything(e) {
-  if (e.target.tagName === 'DIV') {
-    handleElementSelection(-1);
-  }
-}
-
-function setResizableSides(elementIndex) {
-  if (document.querySelector(`#e${elementIndex}`).tagName === 'TEXTAREA') {
-    interact('.selectedElement').options.resize.edges = { left: true, right: true, bottom: false, top: false };
-  } else {
-    interact('.selectedElement').options.resize.edges = { left: true, right: true, bottom: true, top: true };
-  }
-}
+let lastSelectedElementIndex = -1;
 
 function SlideEditor(props) {
+
+  function handleElementSelection(index) {
+    document.querySelectorAll('.selectedElement').forEach((element) => {
+      element.classList.remove('selectedElement');
+    });
+    dragingX = 0;
+    dragingY = 0;
+  
+    if (index !== -1) {
+      //console.log(index);
+      document.querySelector(`#e${index}`).className = 'selectedElement';
+      convertElementPixelToPercentage(index);
+      // Not very important, and does not go well with saveElementModification() (for some reason)
+      //setResizableSides(index);
+  
+      document.querySelector('.selectedElement').addEventListener('input', (e) => {
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          e.target.focus();
+        }
+        convertElementPixelToPercentage(index);
+      });
+      saveElementModification(index);
+    } else {
+      saveElementModification(lastSelectedElementIndex);
+    }
+    lastSelectedElementIndex = index;
+  }
+
+  function generateElement(element, index) {
+    switch (element.type) {
+      case 'text':
+        return <textarea key={element.value + index} defaultValue={element.value} id={`e${index}`} onClick={() => { handleElementSelection(index) }} spellCheck="false" style={{
+          marginLeft: element.x + '%',
+          marginTop: element.y + '%',
+          width: element.w + '%'
+        }} />
+    }
+  }
+  
+  function convertElementPixelToPercentage(elementIndex) {
+    const targetElement = document.querySelector(`#e${elementIndex}`);
+    resizeTextareaToFitAllText(targetElement);
+  
+    if (targetElement.getAttribute('data-x') !== '0') {
+      targetElement.style.marginLeft = (parseFloat(targetElement.style.marginLeft) + percentFromPxX(parseFloat(targetElement.getAttribute('data-x')))) + '%';
+    }
+    if (targetElement.getAttribute('data-y') !== '0') {
+      targetElement.style.marginTop = (parseFloat(targetElement.style.marginTop) + percentFromPxY(parseFloat(targetElement.getAttribute('data-y')))) + '%';
+    }
+  
+    if (!targetElement.style.width.includes('%')) {
+      targetElement.style.width = percentFromPxX(parseFloat(targetElement.style.width)) + '%';
+    }
+    if (!targetElement.style.height.includes('%')) {
+      targetElement.style.height = (parseFloat(targetElement.style.height) / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 100 + '%';
+    }
+  
+    targetElement.style.removeProperty('transform');
+    targetElement.removeAttribute('data-x');
+    targetElement.removeAttribute('data-y');
+  }
+  
+  function resizeTextareaToFitAllText(target) {
+    if (target.tagName === 'TEXTAREA') {
+      target.style.height = '0';
+      target.style.height = (parseFloat(target.scrollHeight) / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 100 + '%';
+    }
+  }
+  
+  function handleDeselectEverything(e) {
+    if (e.target.tagName === 'DIV') {
+      handleElementSelection(-1);
+    }
+  }
+
+  // Not very important, and does not go well with saveElementModification() (for some reason)
+  /*function setResizableSides(elementIndex) {
+    console.log('set resize');
+    if (document.querySelector(`#e${elementIndex}`).tagName === 'TEXTAREA') {
+      interact('.selectedElement').options.resize.edges = { left: true, right: true, bottom: false, top: false };
+    } else {
+      interact('.selectedElement').options.resize.edges = { left: true, right: true, bottom: true, top: true };
+    }
+  }*/
+
+  function saveElementModification(elementIndex) {
+    if (elementIndex !== -1) {
+      const modifiedSlides = structuredClone(props.slides);
+      const modifiedElement = document.querySelector(`#e${elementIndex}`);
+
+      if (modifiedElement.tagName === 'TEXTAREA') {
+        modifiedSlides[props.currentSlide][elementIndex] = {
+          type: 'text',
+          value: modifiedElement.value,
+          x: parseFloat(modifiedElement.style.marginLeft),
+          y: parseFloat(modifiedElement.style.marginTop),
+          w: parseFloat(modifiedElement.style.width)
+        };
+      }
+
+      // Only save if actual change has occured
+      if (JSON.stringify(props.slides) !== JSON.stringify(modifiedSlides) ) {
+        console.log(modifiedSlides);
+        console.log('save', elementIndex)
+        props.setSlides(modifiedSlides);
+      }
+    }
+  }
 
   // Size all texarea properly, when loading
   useEffect(() => {
     props.slides[props.currentSlide].forEach((element, index) => {
       resizeTextareaToFitAllText(document.querySelector(`#e${index}`));
     });
-  }, [props.currentSlide]);
+  }, [props.currentSlide, props.slides]);
 
   interact('.selectedElement').resizable({
     edges: { left: true, right: true, bottom: true, top: true },
