@@ -1,13 +1,14 @@
 import logo from '../assets/logo.svg';
 
 function generateElement(element, index) {
-  switch (element.type) {
+  switch (element.t) {
     case 'text':
-      return <p key={element.value + index + 'mini'} style={{
+      return <p key={element.v + index + 'mini'} style={{
         marginLeft: element.x + '%',
         marginTop: element.y + '%',
-        width: element.w+'%'
-      }}>{element.value}</p>
+        width: element.w+'%',
+        fontSize: element.s + 'vh'
+      }}>{element.v}</p>
   }
 }
 

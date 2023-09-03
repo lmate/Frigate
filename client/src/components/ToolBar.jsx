@@ -10,11 +10,22 @@ function ToolBar(props) {
   function handleAddElement(elementType) {
     const modifiedSlides = structuredClone(props.slides);
 
-    if (elementType === 'text') {
-      modifiedSlides[props.currentSlide].push({type: 'text', value: '', x: 10, y: 20, w: 80});
-      props.setSlides(modifiedSlides);
-      slidesChangeIsInducedByElementAdding = true;
+    /*
+    t = type
+    v = value
+    x = margin-left (%)
+    y = margin-top (%)
+    w = width (%)
+    s = font-size (vh)
+    */
+
+    if (elementType === 'title') {
+      modifiedSlides[props.currentSlide].push({t: 'text', v: '', x: 20, y: 20, w: 60, s: 6});
+    } else if (elementType === 'text') {
+      modifiedSlides[props.currentSlide].push({t: 'text', v: '', x: 20, y: 20, w: 60, s: 3});
     }
+    props.setSlides(modifiedSlides);
+    slidesChangeIsInducedByElementAdding = true;
   }
 
   // Set the new element the active element
@@ -29,8 +40,8 @@ function ToolBar(props) {
 
   return (
     <div className="ToolBar">
-      <div onClick={() => handleAddElement('text')}><img src={titleIcon}/></div>
-      <div><img src={textIcon}/></div>
+      <div onClick={() => handleAddElement('title')}><img src={titleIcon}/></div>
+      <div onClick={() => handleAddElement('text')}><img src={textIcon}/></div>
       <div><img src={imgIcon}/></div>
     </div>
   )

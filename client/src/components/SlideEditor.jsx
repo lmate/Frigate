@@ -40,12 +40,13 @@ function SlideEditor(props) {
   }
 
   function generateElement(element, index) {
-    switch (element.type) {
+    switch (element.t) {
       case 'text':
-        return <textarea key={element.value + index} defaultValue={element.value} id={`e${index}`} onClick={() => { handleElementSelection(index) }} spellCheck="false" style={{
+        return <textarea key={element.v + index} defaultValue={element.v} id={`e${index}`} onClick={() => { handleElementSelection(index) }} spellCheck="false" style={{
           marginLeft: element.x + '%',
           marginTop: element.y + '%',
-          width: element.w + '%'
+          width: element.w + '%',
+          fontSize: element.s + 'vh'
         }} />
     }
   }
@@ -103,11 +104,12 @@ function SlideEditor(props) {
 
       if (modifiedElement.tagName === 'TEXTAREA') {
         modifiedSlides[props.currentSlide][elementIndex] = {
-          type: 'text',
-          value: modifiedElement.value,
+          t: 'text',
+          v: modifiedElement.value,
           x: parseFloat(modifiedElement.style.marginLeft),
           y: parseFloat(modifiedElement.style.marginTop),
-          w: parseFloat(modifiedElement.style.width)
+          w: parseFloat(modifiedElement.style.width),
+          s: parseFloat(modifiedElement.style.fontSize)
         };
       }
 
