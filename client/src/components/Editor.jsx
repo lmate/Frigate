@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Chat from "./Chat";
+import ElementSettings from "./ElementSettings";
 import MenuBar from "./MenuBar";
 import SlideEditor from "./SlideEditor";
 import SlideStrip from "./SlideStrip";
@@ -25,7 +25,7 @@ function Editor() {
   return (
     <>
       <SlideStrip slides={slides} currentSlide={currentSlide} setCurrentSlide={(setIndex) => {setCurrentSlide(setIndex)}} setSlides={(slides) => {setSlides(slides)}}/>
-      <Chat />
+      <ElementSettings />
       <MenuBar />
       <SlideEditor slides={slides} currentSlide={currentSlide}/>
       <ToolBar />

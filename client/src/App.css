@@ -149,6 +149,7 @@ body {
   border: 0px solid black;
   outline: none;
   background-color: transparent;
+  cursor: pointer;
 }
 
 .selectedElement {
@@ -165,7 +166,7 @@ body {
   border-bottom-right-radius: 1vw;
 }
 
-.Chat {
+.ElementSettings {
   float: right;
   height: calc(100vh - 2vw);
   width: calc(98vw - 12vw - ((78vh - .9vw) * 1.78));

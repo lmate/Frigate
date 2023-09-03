@@ -10,7 +10,7 @@ const percentFromPxY = (px) => (px / parseFloat(document.querySelector('.SlideEd
 function generateElement(element, index) {
   switch (element.type) {
     case 'text':
-      return <textarea key={element.value + index} defaultValue={element.value} id={`e${index}`} onClick={() => { handleElementSelection(index) }} style={{
+      return <textarea key={element.value + index} defaultValue={element.value} id={`e${index}`} onClick={() => { handleElementSelection(index) }} spellCheck="false" style={{
         marginLeft: element.x + '%',
         marginTop: element.y + '%',
         width: element.w + '%'
@@ -44,7 +44,7 @@ function convertElementPixelToPercentage(elementIndex) {
 function resizeTextareaToFitAllText(target) {
   if (target.tagName === 'TEXTAREA') {
     target.style.height = '0';
-    target.style.height = target.scrollHeight + 'px';
+    target.style.height = (parseFloat(target.scrollHeight) / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 100 + '%';
   }
 }
 
@@ -57,16 +57,9 @@ function handleElementSelection(index) {
   dragingY = 0;
 
   if (index !== -1) {
-    convertElementPixelToPercentage(index);
-
     document.querySelector(`#e${index}`).className = 'selectedElement';
-
-    // Set what sides are resizeable, based on element type
-    if (document.querySelector(`#e${index}`).tagName === 'TEXTAREA') {
-      interact('.selectedElement').options.resize.edges = { left: true, right: true, bottom: false, top: false };
-    } else {
-      interact('.selectedElement').options.resize.edges = { left: true, right: true, bottom: true, top: true };
-    }
+    convertElementPixelToPercentage(index);
+    setResizableSides(index);
 
     document.querySelector('.selectedElement').addEventListener('input', (e) => {
       if (e.key === 'Tab') {
@@ -84,13 +77,21 @@ function handleDeselectEverything(e) {
   }
 }
 
+function setResizableSides(elementIndex) {
+  if (document.querySelector(`#e${elementIndex}`).tagName === 'TEXTAREA') {
+    interact('.selectedElement').options.resize.edges = { left: true, right: true, bottom: false, top: false };
+  } else {
+    interact('.selectedElement').options.resize.edges = { left: true, right: true, bottom: true, top: true };
+  }
+}
+
 function SlideEditor(props) {
 
   // Size all texarea properly, when loading
   useEffect(() => {
     props.slides[props.currentSlide].forEach((element, index) => {
-      resizeTextareaToFitAllText(document.querySelector(`#e${index}`))
-    })
+      resizeTextareaToFitAllText(document.querySelector(`#e${index}`));
+    });
   }, [props.currentSlide]);
 
   interact('.selectedElement').resizable({
@@ -120,7 +121,7 @@ function SlideEditor(props) {
   }).draggable({
     listeners: {
       move(event) {
-        if (dragingX === 0) {
+        if (dragingX === 0 && dragingY === 0) {
           const editorCoords = document.querySelector('.SlideEditor > div').getBoundingClientRect();
           const targetCoords = event.target.getBoundingClientRect();
           dragingX = percentFromPxX(event.clientX0) - percentFromPxX(editorCoords.x) - percentFromPxX(event.clientX0 - targetCoords.x);
