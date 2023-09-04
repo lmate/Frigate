@@ -25,12 +25,19 @@ function SlideEditor(props) {
       // Not very important, and does not go well with saveElementModification() (for some reason)
       //setResizableSides(index);
   
-      document.querySelector('.selectedElement').addEventListener('input', (e) => {
+      document.querySelector('.selectedElement').addEventListener('keydown', (e) => {
         if (e.key === 'Tab') {
           e.preventDefault();
           e.target.focus();
+        } else if (e.key === 'Delete') {
+          e.preventDefault();
+          lastSelectedElementIndex = -1;
+          const slidesAfterDelete = structuredClone(props.slides);
+          slidesAfterDelete[props.currentSlide].splice(index, 1);
+          props.setSlides(slidesAfterDelete);
+        } else {
+          convertElementPixelToPercentage(index);
         }
-        convertElementPixelToPercentage(index);
       });
       saveElementModification(index);
     } else {
