@@ -20,9 +20,9 @@ function ToolBar(props) {
     */
 
     if (elementType === 'title') {
-      modifiedSlides[props.currentSlide].push({t: 'text', v: '', x: 20, y: 20, w: 60, s: 6});
+      modifiedSlides[props.currentSlide].push({t: 'text', v: 'Title', x: 20, y: 20, w: 60, s: 6});
     } else if (elementType === 'text') {
-      modifiedSlides[props.currentSlide].push({t: 'text', v: '', x: 20, y: 20, w: 60, s: 3});
+      modifiedSlides[props.currentSlide].push({t: 'text', v: 'Text', x: 20, y: 20, w: 60, s: 3});
     }
     props.setSlides(modifiedSlides);
     slidesChangeIsInducedByElementAdding = true;
@@ -33,7 +33,7 @@ function ToolBar(props) {
     if (slidesChangeIsInducedByElementAdding) {
       document.querySelector('.SlideEditor > div').click();
       document.querySelector(`#e${props.slides[props.currentSlide].length - 1}`).click();
-      document.querySelector(`#e${props.slides[props.currentSlide].length - 1}`).focus();
+      //document.querySelector(`#e${props.slides[props.currentSlide].length - 1}`).focus();
       slidesChangeIsInducedByElementAdding = false;
     }
   }, [props.slides]);

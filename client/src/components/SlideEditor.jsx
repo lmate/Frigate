@@ -11,21 +11,35 @@ let lastSelectedElementIndex = -1;
 
 function SlideEditor(props) {
 
-  function handleElementSelection(index) {
+  function handleElementSelection(index, clickMethod) {
     document.querySelectorAll('.selectedElement').forEach((element) => {
       element.classList.remove('selectedElement');
     });
+    document.querySelectorAll('.editingElement').forEach((element) => {
+      element.classList.remove('editingElement');
+    });
     dragingX = 0;
     dragingY = 0;
-  
+
     if (index !== -1) {
       //console.log(index);
-      document.querySelector(`#e${index}`).className = 'selectedElement';
+      if (clickMethod === 'single') {
+        if (!document.querySelector(`#e${index}`).classList.contains('editingElement')) {
+          document.querySelector(`#e${index}`).className = 'selectedElement';
+          console.log('single click')
+          document.querySelector(`#e${index}`).blur();
+        }
+      } else if (clickMethod === 'double') {
+        document.querySelector(`#e${index}`).className = 'editingElement';
+        console.log('double click')
+        document.querySelector(`#e${index}`).focus();
+      }
       convertElementPixelToPercentage(index);
       // Not very important, and does not go well with saveElementModification() (for some reason)
       //setResizableSides(index);
-  
+      /*
       document.querySelector('.selectedElement').addEventListener('keydown', (e) => {
+        console.log(e)
         if (e.key === 'Tab') {
           e.preventDefault();
           e.target.focus();
@@ -35,10 +49,36 @@ function SlideEditor(props) {
           const slidesAfterDelete = structuredClone(props.slides);
           slidesAfterDelete[props.currentSlide].splice(index, 1);
           props.setSlides(slidesAfterDelete);
+        } else if (e.key.slice(0, 5) === 'Arrow') {
+          e.preventDefault();
+          switch (e.key.slice(5)) {
+            case 'Up':
+              if (parseFloat(e.target.style.marginTop) > 0) {
+                e.target.style.marginTop = parseFloat(e.target.style.marginTop) - .2 + '%';
+              }
+              break;
+            case 'Down':
+              //if (parseFloat(e.target.style.marginTop) + parseFloat(e.target.style.height) < 60) {
+                e.target.style.marginTop = parseFloat(e.target.style.marginTop) + .2 + '%';
+              //}
+              break;
+            case 'Left':
+              console.log('itt')
+              e.target.style.marginLeft = parseFloat(e.target.style.marginLeft) - .3 + '%';
+              break;
+            case 'Right':
+              e.target.style.marginLeft = parseFloat(e.target.style.marginLeft) + .3 + '%';
+              break;
+          }
         } else {
+          if (e.key === 'Enter') {
+            console.log(e.target.value)
+            e.preventDefault();
+            e.target.value += '\n';
+          }
           convertElementPixelToPercentage(index);
         }
-      });
+      });*/
       saveElementModification(index);
     } else {
       saveElementModification(lastSelectedElementIndex);
@@ -49,7 +89,7 @@ function SlideEditor(props) {
   function generateElement(element, index) {
     switch (element.t) {
       case 'text':
-        return <textarea key={element.v + index} defaultValue={element.v} id={`e${index}`} onClick={() => { handleElementSelection(index) }} spellCheck="false" style={{
+        return <textarea key={element.v + index} defaultValue={element.v} id={`e${index}`} onClick={() => { handleElementSelection(index, 'single') }} onDoubleClick={() => {handleElementSelection(index, 'double')}} spellCheck="false" style={{
           marginLeft: element.x + '%',
           marginTop: element.y + '%',
           width: element.w + '%',
@@ -57,37 +97,37 @@ function SlideEditor(props) {
         }} />
     }
   }
-  
+
   function convertElementPixelToPercentage(elementIndex) {
     const targetElement = document.querySelector(`#e${elementIndex}`);
     resizeTextareaToFitAllText(targetElement);
-  
+
     if (targetElement.getAttribute('data-x') !== '0') {
       targetElement.style.marginLeft = (parseFloat(targetElement.style.marginLeft) + percentFromPxX(parseFloat(targetElement.getAttribute('data-x')))) + '%';
     }
     if (targetElement.getAttribute('data-y') !== '0') {
       targetElement.style.marginTop = (parseFloat(targetElement.style.marginTop) + percentFromPxY(parseFloat(targetElement.getAttribute('data-y')))) + '%';
     }
-  
+
     if (!targetElement.style.width.includes('%')) {
       targetElement.style.width = percentFromPxX(parseFloat(targetElement.style.width)) + '%';
     }
     if (!targetElement.style.height.includes('%')) {
       targetElement.style.height = (parseFloat(targetElement.style.height) / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 100 + '%';
     }
-  
+
     targetElement.style.removeProperty('transform');
     targetElement.removeAttribute('data-x');
     targetElement.removeAttribute('data-y');
   }
-  
+
   function resizeTextareaToFitAllText(target) {
     if (target.tagName === 'TEXTAREA') {
       target.style.height = '0';
       target.style.height = (parseFloat(target.scrollHeight) / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 100 + '%';
     }
   }
-  
+
   function handleDeselectEverything(e) {
     if (e.target.tagName === 'DIV') {
       handleElementSelection(-1);
@@ -121,7 +161,7 @@ function SlideEditor(props) {
       }
 
       // Only save if actual change has occured
-      if (JSON.stringify(props.slides) !== JSON.stringify(modifiedSlides) ) {
+      if (JSON.stringify(props.slides) !== JSON.stringify(modifiedSlides)) {
         console.log(modifiedSlides);
         console.log('save', elementIndex)
         props.setSlides(modifiedSlides);
