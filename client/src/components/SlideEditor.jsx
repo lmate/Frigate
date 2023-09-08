@@ -12,12 +12,13 @@ let lastSelectedElementIndex = -1;
 function SlideEditor(props) {
 
   function handleElementSelection(index, clickMethod) {
+    /*
     document.querySelectorAll('.selectedElement').forEach((element) => {
       element.classList.remove('selectedElement');
     });
     document.querySelectorAll('.editingElement').forEach((element) => {
       element.classList.remove('editingElement');
-    });
+    });*/
     dragingX = 0;
     dragingY = 0;
 
@@ -25,20 +26,21 @@ function SlideEditor(props) {
       //console.log(index);
       if (clickMethod === 'single') {
         if (!document.querySelector(`#e${index}`).classList.contains('editingElement')) {
+          document.querySelector('.selectedElement')?.classList.remove('selectedElement');
           document.querySelector(`#e${index}`).className = 'selectedElement';
-          console.log('single click')
-          document.querySelector(`#e${index}`).blur();
+          document.querySelector('.selectedElement')?.setAttribute('disabled', true);
         }
       } else if (clickMethod === 'double') {
+        document.querySelector('.selectedElement')?.classList.remove('selectedElement');
+        document.querySelector('.editingElement')?.classList.remove('editingElement');
         document.querySelector(`#e${index}`).className = 'editingElement';
-        console.log('double click')
+        document.querySelector('.editingElement')?.removeAttribute('disabled');
         document.querySelector(`#e${index}`).focus();
       }
       convertElementPixelToPercentage(index);
-      // Not very important, and does not go well with saveElementModification() (for some reason)
-      //setResizableSides(index);
+
       /*
-      document.querySelector('.selectedElement').addEventListener('keydown', (e) => {
+      document.querySelector('.selectedElement')?.addEventListener('keydown', (e) => {
         console.log(e)
         if (e.key === 'Tab') {
           e.preventDefault();
@@ -78,10 +80,13 @@ function SlideEditor(props) {
           }
           convertElementPixelToPercentage(index);
         }
-      });*/
+      });
+      */
       saveElementModification(index);
     } else {
       saveElementModification(lastSelectedElementIndex);
+      document.querySelector('.selectedElement')?.classList.remove('selectedElement');
+      document.querySelector('.editingElement')?.classList.remove('editingElement');
     }
     lastSelectedElementIndex = index;
   }
@@ -130,19 +135,11 @@ function SlideEditor(props) {
 
   function handleDeselectEverything(e) {
     if (e.target.tagName === 'DIV') {
+      document.querySelector('.selectedElement')?.removeAttribute('disabled');
+      document.querySelector('.editingElement')?.removeAttribute('disabled');
       handleElementSelection(-1);
     }
   }
-
-  // Not very important, and does not go well with saveElementModification() (for some reason)
-  /*function setResizableSides(elementIndex) {
-    console.log('set resize');
-    if (document.querySelector(`#e${elementIndex}`).tagName === 'TEXTAREA') {
-      interact('.selectedElement').options.resize.edges = { left: true, right: true, bottom: false, top: false };
-    } else {
-      interact('.selectedElement').options.resize.edges = { left: true, right: true, bottom: true, top: true };
-    }
-  }*/
 
   function saveElementModification(elementIndex) {
     if (elementIndex !== -1) {
