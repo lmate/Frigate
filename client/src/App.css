@@ -168,7 +168,6 @@ body {
 .editingElement {
   border: 2px dashed var(--primary) !important;
   z-index: 999;
-  user-select: none;
   cursor: text !important;
 }
 

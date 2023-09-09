@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ElementSettings from "./ElementSettings";
 import MenuBar from "./MenuBar";
-import SlideEditor from "./SlideEditor";
+import SlideEditorV2 from "./SlideEditorV2";
 import SlideStrip from "./SlideStrip";
 import ToolBar from "./ToolBar";
 
@@ -14,7 +14,7 @@ function Editor() {
       <SlideStrip slides={slides} currentSlide={currentSlide} setCurrentSlide={(setIndex) => {setCurrentSlide(setIndex)}} setSlides={(slides) => {setSlides(slides)}}/>
       <ElementSettings />
       <MenuBar />
-      <SlideEditor slides={slides} currentSlide={currentSlide} setCurrentSlide={(setIndex) => {setCurrentSlide(setIndex)}} setSlides={(slides) => {setSlides(slides)}}/>
+      <SlideEditorV2 slides={slides} currentSlide={currentSlide} setCurrentSlide={(setIndex) => {setCurrentSlide(setIndex)}} setSlides={(slides) => {setSlides(slides)}}/>
       <ToolBar slides={slides} currentSlide={currentSlide} setSlides={(slides) => {setSlides(slides)}}/>
     </>
   )
