@@ -36,6 +36,8 @@ function SlideEditor(props) {
   }
 
   function convertElementPixelToPercentage(target) {
+    resizeTextareaToFitAllText(target);
+
     if (target.getAttribute('data-x') !== '0') {
       target.style.marginLeft = (parseFloat(target.style.marginLeft) + percentFromPxX(parseFloat(target.getAttribute('data-x')))) + '%';
     }
@@ -53,6 +55,13 @@ function SlideEditor(props) {
     target.style.removeProperty('transform');
     target.removeAttribute('data-x');
     target.removeAttribute('data-y');
+  }
+
+  function resizeTextareaToFitAllText(target) {
+    if (target.tagName === 'TEXTAREA') {
+      target.style.height = '0';
+      target.style.height = (parseFloat(target.scrollHeight) / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 100 + '%';
+    }
   }
 
   function handleElementSelection(e) {
@@ -96,7 +105,7 @@ function SlideEditor(props) {
 
   function handleEditingElementKeyboardEvents(e) {
     if (e.target.classList.contains('editingElement')) {
-      console.log('editing')
+      resizeTextareaToFitAllText(e.target);
     }
   }
 
