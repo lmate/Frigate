@@ -156,12 +156,12 @@ body {
   padding: .2vw;
 }
 
-.SlideEditor > div > textarea:disabled, .SlideStrip > div > div > p:disabled {
+.SlideEditor > div > textarea:read-only, .SlideStrip > div > div > p:read-only {
   color: red;
 }
 
-.selectedElement {
-  border: 2px dashed var(--primary) !important;
+.movingElement {
+  border: 2px dashed red !important;
   z-index: 999;
 }
 
