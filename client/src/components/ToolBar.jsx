@@ -31,9 +31,7 @@ function ToolBar(props) {
   // Set the new element the active element
   useEffect(() => {
     if (slidesChangeIsInducedByElementAdding) {
-      document.querySelector('.SlideEditor > div').click();
       document.querySelector(`#e${props.slides[props.currentSlide].length - 1}`).click();
-      //document.querySelector(`#e${props.slides[props.currentSlide].length - 1}`).focus();
       slidesChangeIsInducedByElementAdding = false;
     }
   }, [props.slides]);

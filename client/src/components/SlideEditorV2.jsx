@@ -7,13 +7,15 @@ let dragingY = 0;
 const percentFromPxX = (px) => (px / parseFloat(document.querySelector('.SlideEditor > div').offsetWidth)) * 100;
 const percentFromPxY = (px) => (px / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 56.25;
 
+let elementKeyboardEventListenerAbortController = new AbortController();
+
 function SlideEditor(props) {
 
   function generateElement(element, index) {
     switch (element.t) {
       case 'text':
         return <textarea
-          key={element.v + index}
+          key={`${props.currentSlide}-${index}`}
           defaultValue={element.v}
           id={`e${index}`}
           onClick={handleElementSelection}
@@ -64,6 +66,26 @@ function SlideEditor(props) {
     }
   }
 
+  function saveElementModification(target) {
+    const modifiedSlides = structuredClone(props.slides);
+
+    if (target?.tagName === 'TEXTAREA') {
+      modifiedSlides[props.currentSlide][parseInt(target.getAttribute('id').split('e')[1])] = {
+        t: 'text',
+        v: target.value,
+        x: parseFloat(target.style.marginLeft),
+        y: parseFloat(target.style.marginTop),
+        w: parseFloat(target.style.width),
+        s: parseFloat(target.style.fontSize)
+      };
+    }
+
+    // Only save if actual change has occured
+    if (JSON.stringify(props.slides) !== JSON.stringify(modifiedSlides)) {
+      props.setSlides(modifiedSlides);
+    }
+  }
+
   function handleElementSelection(e) {
     e.stopPropagation();
     if (!e.target.classList.contains('selectedElement')) {
@@ -85,27 +107,58 @@ function SlideEditor(props) {
       document.querySelectorAll('.movingElement')?.forEach((element) => { element.classList.remove('movingElement') });
       e.target.removeAttribute('readonly');
     }
-
     handleAddElementKeyboardEventListeners();
   }
 
   function handleAddElementKeyboardEventListeners() {
-    document.querySelector('.selectedElement').removeEventListener("keydown", handleMovingElementKeyboardEvents);
-    document.querySelector('.selectedElement').removeEventListener("input", handleEditingElementKeyboardEvents);
+    elementKeyboardEventListenerAbortController.abort();
+    elementKeyboardEventListenerAbortController = new AbortController();
 
-    document.querySelector('.selectedElement').addEventListener('keydown', handleMovingElementKeyboardEvents);
-    document.querySelector('.selectedElement').addEventListener('input', handleEditingElementKeyboardEvents);
+    document.querySelector('.selectedElement').addEventListener('keydown', handleMovingElementKeyboardEvents, { signal: elementKeyboardEventListenerAbortController.signal });
+    document.querySelector('.selectedElement').addEventListener('input', handleEditingElementKeyboardEvents, { signal: elementKeyboardEventListenerAbortController.signal });
   }
 
   function handleMovingElementKeyboardEvents(e) {
     if (e.target.classList.contains('movingElement')) {
-      console.log('moving')
+      console.log('registering')
+      e.preventDefault();
+      if (e.key.slice(0, 5) === 'Arrow') {
+        switch (e.key.slice(5)) {
+          case 'Up':
+            if (parseFloat(e.target.style.marginTop) > 0) {
+              e.target.style.marginTop = parseFloat(e.target.style.marginTop) - .2 + '%';
+            }
+            break;
+          case 'Down':
+            if (parseFloat(e.target.style.marginTop) + parseFloat(e.target.style.height) < 60) {
+              e.target.style.marginTop = parseFloat(e.target.style.marginTop) + .2 + '%';
+            }
+            break;
+          case 'Left':
+            if (parseFloat(e.target.style.marginLeft) > 0) {
+              e.target.style.marginLeft = parseFloat(e.target.style.marginLeft) - .3 + '%';
+            }
+            break;
+          case 'Right':
+            if (parseFloat(e.target.style.marginLeft) + parseFloat(e.target.style.width) < 99) {
+              e.target.style.marginLeft = parseFloat(e.target.style.marginLeft) + .3 + '%';
+            }
+            break;
+        }
+      } else if (e.key === 'Delete') {
+        const slidesAfterDelete = structuredClone(props.slides);
+        slidesAfterDelete[props.currentSlide].splice(parseInt(e.target.getAttribute('id').split('e')[1]), 1);
+        handleDeselectEveryElement();
+        props.setSlides(slidesAfterDelete);
+      }
+      saveElementModification(e.target);
     }
   }
 
   function handleEditingElementKeyboardEvents(e) {
     if (e.target.classList.contains('editingElement')) {
       resizeTextareaToFitAllText(e.target);
+      saveElementModification(e.target);
     }
   }
 
@@ -124,6 +177,7 @@ function SlideEditor(props) {
         target.setAttribute('data-x', x);
         target.setAttribute('data-y', y);
         convertElementPixelToPercentage(target);
+        saveElementModification(target);
       }
     },
     modifiers: [
@@ -144,6 +198,7 @@ function SlideEditor(props) {
         event.target.style.marginLeft = dragingX + '%';
         event.target.style.marginTop = dragingY + '%';
         convertElementPixelToPercentage(event.target);
+        saveElementModification(event.target);
       },
     },
     inertia: true,
@@ -154,6 +209,13 @@ function SlideEditor(props) {
       })
     ]
   });
+
+  // Set texarea height when loading
+  useEffect(() => {
+    props.slides[props.currentSlide].forEach((element, index) => {
+      resizeTextareaToFitAllText(document.querySelector(`#e${index}`));
+    });
+  }, [props.currentSlide, props.slides]);
 
   return (
     <div className="SlideEditor">
