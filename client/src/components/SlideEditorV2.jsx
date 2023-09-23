@@ -70,15 +70,16 @@ function SlideEditor(props) {
 
   function saveElementModification(target) {
     const modifiedSlides = structuredClone(props.slides);
+    const roundTo1Decimal = (num) => Math.round(num * 10) / 10;
 
     if (target?.tagName === 'TEXTAREA') {
       modifiedSlides[props.currentSlide][parseInt(target.getAttribute('id').split('e')[1])] = {
         t: 'text',
         v: target.value,
-        x: parseFloat(target.style.marginLeft),
-        y: parseFloat(target.style.marginTop),
-        w: parseFloat(target.style.width),
-        s: parseFloat(target.style.fontSize)
+        x: roundTo1Decimal(parseFloat(target.style.marginLeft)),
+        y: roundTo1Decimal(parseFloat(target.style.marginTop)),
+        w: roundTo1Decimal(parseFloat(target.style.width)),
+        s: roundTo1Decimal(parseFloat(target.style.fontSize))
       };
     }
 

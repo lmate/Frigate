@@ -33,6 +33,7 @@ body {
   height: 9.3vh;
   cursor: pointer;
   padding-top: .6vh;
+  overflow: hidden;
 }
 
 .SlideStrip > div > div {
@@ -138,6 +139,7 @@ body {
 
 .SlideEditor > div {
   position: relative;
+  overflow: hidden;
   background-color: var(--bg);
   width: 100%;
   height: 100%;
@@ -253,6 +255,8 @@ body {
   border: 2px solid var(--primary);
   border-radius: .3vw;
   outline: none;
+  font-family: 'Montserrat', sans-serif;
+  text-align: right;
 }
 
 .ElementSettings > .settingGroup > label {
@@ -264,4 +268,5 @@ body {
   font-weight: 800;
   font-size: small;
   text-align: right;
+  cursor: e-resize;
 }
