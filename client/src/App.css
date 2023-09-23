@@ -3,6 +3,7 @@
   --elementbg: #f0f5f8;
   --primary: #0a60e5;
   --secondary: #7c838b;
+  --accent: #b1b6b9;
 }
 
 body {
@@ -22,12 +23,12 @@ body {
   overflow-y: scroll;
   overflow-x: hidden;
 }
+
 .SlideStrip::-webkit-scrollbar {
   width: 0px;
 }
 
 .SlideStrip > div {
-  border: 0px solid red;
   width: 10vw;
   height: 9.3vh;
   cursor: pointer;
@@ -218,8 +219,49 @@ body {
 
 .ElementSettings {
   float: right;
-  height: calc(100vh - 2vw);
+  height: calc(99vh - 2vw);
   width: calc(98vw - 12vw - ((78vh - .9vw) * 1.78));
   border-radius: 1vw;
   background-color: var(--elementbg);
+  padding-top: 1vh;
+}
+
+.ElementSettings > .settingGroup {
+  width: calc((98vw - 12vw - ((78vh - .9vw) * 1.78)) - 2vw - 2px);
+  border-left: 2px solid var(--primary);
+  background-color: #d1dff1;
+  border-radius: 0vw;
+  padding: 1vw;
+  padding-bottom: calc(1vw - 1vh);
+}
+
+.ElementSettings > span {
+  display: inline-block;
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 1.8vh;
+  padding: .4vh;
+  padding-left: 1vw;
+  padding-top: 2vh;
+}
+
+.ElementSettings > .settingGroup > input {
+  display: inline-block;
+  width: 5vw;
+  margin: .2vw;
+  margin-bottom: 1vh;
+  border: 2px solid var(--primary);
+  border-radius: .3vw;
+  outline: none;
+}
+
+.ElementSettings > .settingGroup > label {
+  display: inline-block;
+  min-width: 5%;
+  margin-right: 2%;
+  margin-left: 4%;
+  color: var(--primary);
+  font-weight: 800;
+  font-size: small;
+  text-align: right;
 }

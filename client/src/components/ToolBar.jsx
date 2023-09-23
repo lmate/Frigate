@@ -34,7 +34,7 @@ function ToolBar(props) {
       document.querySelector(`#e${props.slides[props.currentSlide].length - 1}`).click();
       slidesChangeIsInducedByElementAdding = false;
     }
-  }, [props.slides]);
+  }, [props.slides, props.currentSlide]);
 
   return (
     <div className="ToolBar">

@@ -1,5 +1,5 @@
 import interact from 'interactjs';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect } from 'react';
 
 let dragingX = 0;
 let dragingY = 0;
@@ -35,6 +35,8 @@ function SlideEditor(props) {
     document.querySelectorAll('.selectedElement')?.forEach((element) => { element.classList.remove('selectedElement') });
     document.querySelectorAll('.editingElement')?.forEach((element) => { element.classList.remove('editingElement') });
     document.querySelectorAll('.movingElement')?.forEach((element) => { element.classList.remove('movingElement') });
+
+    props.setSelectedElement(null);
   }
 
   function convertElementPixelToPercentage(target) {
@@ -91,6 +93,7 @@ function SlideEditor(props) {
     if (!e.target.classList.contains('selectedElement')) {
       handleDeselectEveryElement();
       e.target.classList.add('selectedElement');
+      props.setSelectedElement(e.target);
     }
 
     dragingX = 0;
@@ -120,7 +123,6 @@ function SlideEditor(props) {
 
   function handleMovingElementKeyboardEvents(e) {
     if (e.target.classList.contains('movingElement')) {
-      console.log('registering')
       e.preventDefault();
       if (e.key.slice(0, 5) === 'Arrow') {
         switch (e.key.slice(5)) {
