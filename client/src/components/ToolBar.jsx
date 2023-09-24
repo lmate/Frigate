@@ -17,12 +17,13 @@ function ToolBar(props) {
     y = margin-top (%)
     w = width (%)
     s = font-size (vh)
+    c = color (hex)
     */
 
     if (elementType === 'title') {
-      modifiedSlides[props.currentSlide].push({t: 'text', v: 'Title', x: 20, y: 20, w: 60, s: 6});
+      modifiedSlides[props.currentSlide].push({t: 'text', v: 'Title', x: 20, y: 20, w: 60, s: 6, c: '000000'});
     } else if (elementType === 'text') {
-      modifiedSlides[props.currentSlide].push({t: 'text', v: 'Text', x: 20, y: 20, w: 60, s: 3});
+      modifiedSlides[props.currentSlide].push({t: 'text', v: 'Text', x: 20, y: 20, w: 60, s: 3, c: '000000'});
     }
     props.setSlides(modifiedSlides);
     slidesChangeIsInducedByElementAdding = true;

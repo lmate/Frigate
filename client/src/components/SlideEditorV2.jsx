@@ -24,7 +24,8 @@ function SlideEditor(props) {
             marginLeft: element.x + '%',
             marginTop: element.y + '%',
             width: element.w + '%',
-            fontSize: element.s + 'vh'
+            fontSize: element.s + 'vh',
+            color: '#' + element.c
           }}
         />
     }
@@ -74,12 +75,13 @@ function SlideEditor(props) {
 
     if (target?.tagName === 'TEXTAREA') {
       modifiedSlides[props.currentSlide][parseInt(target.getAttribute('id').split('e')[1])] = {
+        ...modifiedSlides[props.currentSlide][parseInt(target.getAttribute('id').split('e')[1])],
         t: 'text',
         v: target.value,
         x: roundTo1Decimal(parseFloat(target.style.marginLeft)),
         y: roundTo1Decimal(parseFloat(target.style.marginTop)),
         w: roundTo1Decimal(parseFloat(target.style.width)),
-        s: roundTo1Decimal(parseFloat(target.style.fontSize))
+        s: roundTo1Decimal(parseFloat(target.style.fontSize)),
       };
     }
 

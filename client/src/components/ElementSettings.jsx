@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { HexColorPicker, HexColorInput } from "react-colorful";
 
 let labelSliderStartingValue = 0;
 
 function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
   const [selectedElementObj, setSelectedElementObj] = useState(null);
+  const [colorPickerValue, setColorPickerValue] = useState("#000000");
 
   useEffect(() => {
     if (selectedElement) {
@@ -28,6 +30,20 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
     labelSliderStartingValue = slides[currentSlide][parseInt(selectedElement.getAttribute('id').split('e')[1])][elementOnSlideKey];
   }
 
+  // Handle color picker value change
+  useEffect(() => {
+    if (selectedElement) {
+      handleChangeElement({target: {value: colorPickerValue.split('#')[1]}}, 'c');
+    }
+  }, [colorPickerValue]);
+
+  // Setting initial value of colorpicker
+  useEffect(() => {
+    if (selectedElement) {
+      setColorPickerValue('#' + slides[currentSlide][parseInt(selectedElement.getAttribute('id').split('e')[1])].c);
+    }
+  }, [selectedElement]);
+
   return (
     <div className="ElementSettings">
       {selectedElementObj && (
@@ -45,6 +61,12 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
           <div className="settingGroup">
             <label htmlFor="s" onDrag={(e) => handleLabelSlider(e, 's')} onDragStart={() => handleLabelSliderStart('s')} draggable="true">Size</label>
             <input type="number" id="s" value={selectedElementObj.s} onChange={(e) => handleChangeElement(e, 's')} />
+          </div>
+          <span>Color</span>
+          <div className="settingGroup">
+            <HexColorPicker className="colorPicker" color={colorPickerValue} onChange={setColorPickerValue} />
+            <label htmlFor="c">HEX</label>
+            <HexColorInput id="c" className="colorInput" color={colorPickerValue} onChange={setColorPickerValue} />
           </div>
         </>
       )}

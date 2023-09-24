@@ -7,7 +7,8 @@ function generateElement(element, index) {
         marginLeft: element.x + '%',
         marginTop: element.y + '%',
         width: element.w+'%',
-        fontSize: element.s + 'vh'
+        fontSize: element.s + 'vh',
+        color: '#' + element.c
       }}>{element.v}</p>
   }
 }

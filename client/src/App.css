@@ -159,12 +159,8 @@ body {
   padding: .2vw;
 }
 
-.SlideEditor > div > textarea:read-only, .SlideStrip > div > div > p:read-only {
-  color: red;
-}
-
 .movingElement {
-  border: 2px dashed red !important;
+  border: 2px dashed var(--primary) !important;
   z-index: 999;
 }
 
@@ -269,4 +265,14 @@ body {
   font-size: small;
   text-align: right;
   cursor: e-resize;
+}
+
+.settingGroup > .colorPicker {
+  width: 100%;
+  height: 10vh;
+  margin-bottom: 1vh;
+}
+
+.settingGroup > .colorInput {
+  margin-bottom: 1vh;
 }
