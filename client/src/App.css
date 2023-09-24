@@ -160,12 +160,14 @@ body {
 }
 
 .movingElement {
-  border: 2px dashed var(--primary) !important;
+  outline: 2px dashed var(--primary) !important;
+  outline-offset: -2px;
   z-index: 999;
 }
 
 .editingElement {
-  border: 2px dashed var(--primary) !important;
+  outline: 2px dashed var(--primary) !important;
+  outline-offset: -2px;
   z-index: 999;
   cursor: text !important;
 }
@@ -295,5 +297,9 @@ body {
 }
 
 .settingGroup > .segmentedControl > label > input:checked + img {
+  filter: invert(23%) sepia(93%) saturate(2345%) hue-rotate(210deg) brightness(95%) contrast(96%);
+}
+
+.settingGroup > .segmentedControl > label > input:active + img {
   filter: invert(23%) sepia(93%) saturate(2345%) hue-rotate(210deg) brightness(95%) contrast(96%);
 }

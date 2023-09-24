@@ -22,7 +22,7 @@ function ToolBar(props) {
     */
 
     if (elementType === 'title') {
-      modifiedSlides[props.currentSlide].push({t: 'text', v: 'Title', x: 20, y: 20, w: 60, s: 6, c: '000000', a: 'left'});
+      modifiedSlides[props.currentSlide].push({t: 'text', v: 'Title', x: 20, y: 20, w: 60, s: 6, c: '000000', a: 'center'});
     } else if (elementType === 'text') {
       modifiedSlides[props.currentSlide].push({t: 'text', v: 'Text', x: 20, y: 20, w: 60, s: 3, c: '000000', a: 'left'});
     }
