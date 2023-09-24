@@ -18,6 +18,8 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
   useEffect(() => {
     if (selectedElement) {
       setSelectedElementObj(slides[currentSlide][parseInt(selectedElement.getAttribute('id').split('e')[1])]);
+    } else {
+      setSelectedElementObj(null);
     }
   }, [slides, currentSlide, selectedElement]);
 
@@ -54,11 +56,11 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
 
   function handleAlignToSide(side) {
     if (side === 'left') {
-      handleChangeElement({target: {value: 0}}, 'x');
+      handleChangeElement({ target: { value: 0 } }, 'x');
     } else if (side === 'center') {
-      handleChangeElement({target: {value: (100 - selectedElementObj.w) / 2}}, 'x');
+      handleChangeElement({ target: { value: (100 - selectedElementObj.w) / 2 } }, 'x');
     } else if (side === 'right') {
-      handleChangeElement({target: {value: 99 - selectedElementObj.w}}, 'x');
+      handleChangeElement({ target: { value: 99 - selectedElementObj.w } }, 'x');
     }
   }
 
@@ -66,40 +68,72 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
     <div className="ElementSettings">
       {selectedElementObj && (
         <>
-          <span>Position</span>
-          <div className="settingGroup">
-            <label htmlFor="x" onDrag={(e) => handleLabelSlider(e, 'x')} onDragStart={() => handleLabelSliderStart('x')} draggable="true">X</label>
-            <input type="number" id="x" value={selectedElementObj.x} onChange={(e) => handleChangeElement(e, 'x')} />
-            <label htmlFor="y" onDrag={(e) => handleLabelSlider(e, 'y')} onDragStart={() => handleLabelSliderStart('y')} draggable="true">Y</label>
-            <input type="number" id="y" value={selectedElementObj.y} onChange={(e) => handleChangeElement(e, 'y')} />
-            <label htmlFor="w" onDrag={(e) => handleLabelSlider(e, 'w')} onDragStart={() => handleLabelSliderStart('w')} draggable="true">W</label>
-            <input type="number" id="w" value={selectedElementObj.w} onChange={(e) => handleChangeElement(e, 'w')} /><br />
-            <label style={{ cursor: 'auto', marginTop: '1vh', marginBottom: '1vh' }}>Align</label>
-            <div className="segmentedControl">
-              <label><input type="button" value='left' onClick={() => handleAlignToSide('left')} /><img src={sideLeftIcon} /></label>
-              <label><input type="button" value='center' onClick={() => handleAlignToSide('center')} /><img src={sideCenterIcon} /></label>
-              <label><input type="button" value='right' onClick={() => handleAlignToSide('right')} /><img src={sideRightIcon} /></label>
-            </div>
-          </div>
-          <span>Font</span>
-          <div className="settingGroup">
-            <label htmlFor="s" onDrag={(e) => handleLabelSlider(e, 's')} onDragStart={() => handleLabelSliderStart('s')} draggable="true">Size</label>
-            <input type="number" id="s" value={selectedElementObj.s} onChange={(e) => handleChangeElement(e, 's')} /><br />
+          {(selectedElementObj.t === 'title' || selectedElementObj.t === 'text') && (
+            <>
+              <span>Position</span>
+              <div className="settingGroup">
+                <label htmlFor="x" onDrag={(e) => handleLabelSlider(e, 'x')} onDragStart={() => handleLabelSliderStart('x')} draggable="true">X</label>
+                <input type="number" id="x" value={selectedElementObj.x} onChange={(e) => handleChangeElement(e, 'x')} />
+                <label htmlFor="y" onDrag={(e) => handleLabelSlider(e, 'y')} onDragStart={() => handleLabelSliderStart('y')} draggable="true">Y</label>
+                <input type="number" id="y" value={selectedElementObj.y} onChange={(e) => handleChangeElement(e, 'y')} />
+                <label htmlFor="w" onDrag={(e) => handleLabelSlider(e, 'w')} onDragStart={() => handleLabelSliderStart('w')} draggable="true">W</label>
+                <input type="number" id="w" value={selectedElementObj.w} onChange={(e) => handleChangeElement(e, 'w')} /><br />
+                <label style={{ cursor: 'auto', marginTop: '1vh', marginBottom: '1vh' }}>Align</label>
+                <div className="segmentedControl">
+                  <label><input type="button" value='left' onClick={() => handleAlignToSide('left')} /><img src={sideLeftIcon} /></label>
+                  <label><input type="button" value='center' onClick={() => handleAlignToSide('center')} /><img src={sideCenterIcon} /></label>
+                  <label><input type="button" value='right' onClick={() => handleAlignToSide('right')} /><img src={sideRightIcon} /></label>
+                </div>
+              </div>
+              <span>Font</span>
+              <div className="settingGroup">
+                <label htmlFor="s" onDrag={(e) => handleLabelSlider(e, 's')} onDragStart={() => handleLabelSliderStart('s')} draggable="true">Size</label>
+                <input type="number" id="s" value={selectedElementObj.s} onChange={(e) => handleChangeElement(e, 's')} /><br />
 
-            <label style={{ cursor: 'auto', marginTop: '1vh', marginBottom: '1vh' }}>Align</label>
-            <div className="segmentedControl" onChange={(e) => handleChangeElement(e, 'a')}>
-              <label><input type="radio" value='left' name='textalign' checked={selectedElementObj.a === 'left' && true} readOnly /><img src={alignLeftIcon} /></label>
-              <label><input type="radio" value='center' name='textalign' checked={selectedElementObj.a === 'center' && true} readOnly /><img src={alignCenterIcon} /></label>
-              <label><input type="radio" value='right' name='textalign' checked={selectedElementObj.a === 'right' && true} readOnly /><img src={alignRightIcon} /></label>
-              <label><input type="radio" value='justify' name='textalign' checked={selectedElementObj.a === 'justify' && true} readOnly /><img src={alignJustifyIcon} /></label>
-            </div>
-          </div>
-          <span>Color</span>
-          <div className="settingGroup">
-            <HexColorPicker className="colorPicker" color={colorPickerValue} onChange={setColorPickerValue} />
-            <label htmlFor="c">HEX</label>
-            <HexColorInput id="c" className="colorInput" color={colorPickerValue} onChange={setColorPickerValue} />
-          </div>
+                <label style={{ cursor: 'auto', marginTop: '1vh', marginBottom: '1vh' }}>Align</label>
+                <div className="segmentedControl" onChange={(e) => handleChangeElement(e, 'a')}>
+                  <label><input type="radio" value='left' name='textalign' checked={selectedElementObj.a === 'left' && true} readOnly /><img src={alignLeftIcon} /></label>
+                  <label><input type="radio" value='center' name='textalign' checked={selectedElementObj.a === 'center' && true} readOnly /><img src={alignCenterIcon} /></label>
+                  <label><input type="radio" value='right' name='textalign' checked={selectedElementObj.a === 'right' && true} readOnly /><img src={alignRightIcon} /></label>
+                  <label><input type="radio" value='justify' name='textalign' checked={selectedElementObj.a === 'justify' && true} readOnly /><img src={alignJustifyIcon} /></label>
+                </div>
+              </div>
+              <span>Color</span>
+              <div className="settingGroup">
+                <HexColorPicker className="colorPicker" color={colorPickerValue} onChange={setColorPickerValue} />
+                <label htmlFor="c">HEX</label>
+                <HexColorInput id="c" className="colorInput" color={colorPickerValue} onChange={setColorPickerValue} />
+              </div>
+            </>
+          )}
+          {selectedElementObj.t === 'rect' && (
+            <>
+              <span>Position</span>
+              <div className="settingGroup">
+                <label htmlFor="x" onDrag={(e) => handleLabelSlider(e, 'x')} onDragStart={() => handleLabelSliderStart('x')} draggable="true">X</label>
+                <input type="number" id="x" value={selectedElementObj.x} onChange={(e) => handleChangeElement(e, 'x')} />
+                <label htmlFor="y" onDrag={(e) => handleLabelSlider(e, 'y')} onDragStart={() => handleLabelSliderStart('y')} draggable="true">Y</label>
+                <input type="number" id="y" value={selectedElementObj.y} onChange={(e) => handleChangeElement(e, 'y')} />
+                <label htmlFor="w" onDrag={(e) => handleLabelSlider(e, 'w')} onDragStart={() => handleLabelSliderStart('w')} draggable="true">W</label>
+                <input type="number" id="w" value={selectedElementObj.w} onChange={(e) => handleChangeElement(e, 'w')} />
+                <label htmlFor="h" onDrag={(e) => handleLabelSlider(e, 'h')} onDragStart={() => handleLabelSliderStart('h')} draggable="true">H</label>
+                <input type="number" id="h" value={selectedElementObj.h} onChange={(e) => handleChangeElement(e, 'h')} /><br />
+                <label style={{ cursor: 'auto', marginTop: '1vh', marginBottom: '1vh' }}>Align</label>
+                <div className="segmentedControl">
+                  <label><input type="button" value='left' onClick={() => handleAlignToSide('left')} /><img src={sideLeftIcon} /></label>
+                  <label><input type="button" value='center' onClick={() => handleAlignToSide('center')} /><img src={sideCenterIcon} /></label>
+                  <label><input type="button" value='right' onClick={() => handleAlignToSide('right')} /><img src={sideRightIcon} /></label>
+                </div>
+              </div>
+              <span>Color</span>
+              <div className="settingGroup">
+                <HexColorPicker className="colorPicker" color={colorPickerValue} onChange={setColorPickerValue} />
+                <label htmlFor="c">HEX</label>
+                <HexColorInput id="c" className="colorInput" color={colorPickerValue} onChange={setColorPickerValue} />
+              </div>
+            </>
+          )}
+
         </>
       )}
     </div>

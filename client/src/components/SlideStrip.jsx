@@ -6,11 +6,21 @@ function generateElement(element, index) {
       return <p key={element.v + index + 'mini'} style={{
         marginLeft: element.x + '%',
         marginTop: element.y + '%',
-        width: element.w+'%',
+        width: element.w + '%',
         fontSize: element.s + 'vh',
         color: '#' + element.c,
         textAlign: element.a
       }}>{element.v}</p>
+    case 'rect':
+      return <div
+        key={element.v + index + 'mini'}
+        style={{
+          marginLeft: element.x + '%',
+          marginTop: element.y + '%',
+          width: element.w + '%',
+          height: element.h + '%',
+          backgroundColor: '#' + element.c,
+        }} />
   }
 }
 
@@ -25,7 +35,7 @@ function SlideStrip(props) {
     updatedSlides.push([]);
     props.setSlides(updatedSlides);
     props.setCurrentSlide(updatedSlides.length - 1);
-    document.querySelector('.SlidesBottom').scrollIntoView({ behavior: "smooth"});
+    document.querySelector('.SlidesBottom').scrollIntoView({ behavior: "smooth" });
   }
 
   return (

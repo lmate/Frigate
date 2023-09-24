@@ -29,6 +29,19 @@ function SlideEditor(props) {
             textAlign: element.a
           }}
         />
+      case 'rect':
+        return <div
+          key={`${props.currentSlide}-${index}`}
+          id={`e${index}`}
+          onClick={handleElementSelection}
+          tabIndex="0"
+          style={{
+            marginLeft: element.x + '%',
+            marginTop: element.y + '%',
+            width: element.w + '%',
+            height: element.h + '%',
+            backgroundColor: '#' + element.c,
+          }} />
     }
   }
 
@@ -84,6 +97,15 @@ function SlideEditor(props) {
         w: roundTo1Decimal(parseFloat(target.style.width)),
         s: roundTo1Decimal(parseFloat(target.style.fontSize)),
       };
+    } else if (target?.tagName === 'DIV') {
+      modifiedSlides[props.currentSlide][parseInt(target.getAttribute('id').split('e')[1])] = {
+        ...modifiedSlides[props.currentSlide][parseInt(target.getAttribute('id').split('e')[1])],
+        t: 'rect',
+        x: roundTo1Decimal(parseFloat(target.style.marginLeft)),
+        y: roundTo1Decimal(parseFloat(target.style.marginTop)),
+        w: roundTo1Decimal(parseFloat(target.style.width)),
+        h: roundTo1Decimal(parseFloat(target.style.height)),
+      };
     }
 
     // Only save if actual change has occured
@@ -127,6 +149,7 @@ function SlideEditor(props) {
 
   function handleMovingElementKeyboardEvents(e) {
     if (e.target.classList.contains('movingElement')) {
+      console.log('az')
       e.preventDefault();
       if (e.key.slice(0, 5) === 'Arrow') {
         switch (e.key.slice(5)) {

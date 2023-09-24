@@ -157,6 +157,17 @@ body {
   white-space: pre-line;
   font-size: 18pt;
   padding: .2vw;
+  z-index: 1;
+}
+
+.SlideEditor > div > div, .SlideStrip > div > div > div {
+  position: absolute;
+  resize: none;
+  border: 0px solid black;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: .2vw;
 }
 
 .movingElement {
@@ -229,7 +240,6 @@ body {
 .ElementSettings > .settingGroup {
   width: calc((98vw - 12vw - ((78vh - .9vw) * 1.78)) - 2vw - 2px);
   border-left: 2px solid var(--primary);
-  background-color: #d1dff1;
   border-radius: 0vw;
   padding: 1vw;
   padding-bottom: calc(1vw - 1vh);

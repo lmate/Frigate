@@ -1,6 +1,7 @@
 import titleIcon from '../assets/title_icon.svg';
 import textIcon from '../assets/text_icon.svg';
 import imgIcon from '../assets/img_icon.svg';
+import rectIcon from '../assets/rect_icon.svg';
 import { useEffect } from 'react';
 
 let slidesChangeIsInducedByElementAdding = false;
@@ -16,6 +17,7 @@ function ToolBar(props) {
     x = margin-left (%)
     y = margin-top (%)
     w = width (%)
+    h = height (%)
     s = font-size (vh)
     c = color (hex)
     a = text-align
@@ -25,6 +27,8 @@ function ToolBar(props) {
       modifiedSlides[props.currentSlide].push({t: 'text', v: 'Title', x: 20, y: 20, w: 60, s: 6, c: '000000', a: 'center'});
     } else if (elementType === 'text') {
       modifiedSlides[props.currentSlide].push({t: 'text', v: 'Text', x: 20, y: 20, w: 60, s: 3, c: '000000', a: 'left'});
+    } else if (elementType === 'rect') {
+      modifiedSlides[props.currentSlide].push({t: 'rect', x: 20, y: 20, w: 60, h: 30, c: '000000'});
     }
     props.setSlides(modifiedSlides);
     slidesChangeIsInducedByElementAdding = true;
@@ -43,6 +47,7 @@ function ToolBar(props) {
       <div onClick={() => handleAddElement('title')}><img src={titleIcon}/></div>
       <div onClick={() => handleAddElement('text')}><img src={textIcon}/></div>
       <div><img src={imgIcon}/></div>
+      <div onClick={() => handleAddElement('rect')}><img src={rectIcon}/></div>
     </div>
   )
 }
