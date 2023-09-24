@@ -276,3 +276,24 @@ body {
 .settingGroup > .colorInput {
   margin-bottom: 1vh;
 }
+
+.settingGroup > .segmentedControl {
+  display: inline-block;
+  position: absolute;
+  margin-top: .4vh;
+  margin-left: .3vw;
+}
+
+.settingGroup > .segmentedControl > label > input {
+  display: none;
+}
+
+.settingGroup > .segmentedControl > label > img {
+  filter: invert(51%) sepia(16%) saturate(190%) hue-rotate(172deg) brightness(98%) contrast(91%);
+  padding: .1vw;
+  cursor: pointer;
+}
+
+.settingGroup > .segmentedControl > label > input:checked + img {
+  filter: invert(23%) sepia(93%) saturate(2345%) hue-rotate(210deg) brightness(95%) contrast(96%);
+}

@@ -25,7 +25,8 @@ function SlideEditor(props) {
             marginTop: element.y + '%',
             width: element.w + '%',
             fontSize: element.s + 'vh',
-            color: '#' + element.c
+            color: '#' + element.c,
+            textAlign: element.a
           }}
         />
     }

@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 
+import alignLeftIcon from '../assets/align_left_icon.svg';
+import alignCenterIcon from '../assets/align_center_icon.svg';
+import alignRightIcon from '../assets/align_right_icon.svg';
+import alignJustifyIcon from '../assets/align_justify_icon.svg';
+
 let labelSliderStartingValue = 0;
 
 function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
@@ -60,7 +65,15 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
           <span>Font</span>
           <div className="settingGroup">
             <label htmlFor="s" onDrag={(e) => handleLabelSlider(e, 's')} onDragStart={() => handleLabelSliderStart('s')} draggable="true">Size</label>
-            <input type="number" id="s" value={selectedElementObj.s} onChange={(e) => handleChangeElement(e, 's')} />
+            <input type="number" id="s" value={selectedElementObj.s} onChange={(e) => handleChangeElement(e, 's')} /><br />
+            
+            <label style={{cursor: 'auto', marginTop: '1vh', marginBottom: '1vh'}}>Align</label>
+            <div className="segmentedControl" onChange={(e) => handleChangeElement(e, 'a')}>
+              <label><input type="radio" value='left' name='align' checked={selectedElementObj.a === 'left' && true} readOnly /><img src={alignLeftIcon}/></label>
+              <label><input type="radio" value='center' name='align' checked={selectedElementObj.a === 'center' && true} readOnly /><img src={alignCenterIcon}/></label>
+              <label><input type="radio" value='right' name='align' checked={selectedElementObj.a === 'right' && true} readOnly /><img src={alignRightIcon}/></label>
+              <label><input type="radio" value='justify' name='align' checked={selectedElementObj.a === 'justify' && true} readOnly /><img src={alignJustifyIcon}/></label>
+            </div>
           </div>
           <span>Color</span>
           <div className="settingGroup">
