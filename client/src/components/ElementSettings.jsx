@@ -35,6 +35,9 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement, pre
   function handleLabelSlider(e, elementOnSlideKey) {
     let newValue = Math.round((labelSliderStartingValue - ((e.target.getBoundingClientRect().left - e.clientX) / 5)) * 10) / 10;
     if (newValue > -100) {
+      // radius value cant go below 0
+      if (elementOnSlideKey === 'r' && newValue < 0) { newValue = 0 }
+
       handleChangeElement({ target: { value: newValue } }, elementOnSlideKey);
     }
   }
@@ -48,7 +51,7 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement, pre
     if (selectedElement) {
       handleChangeElement({ target: { value: colorPickerValue.split('#')[1] } }, 'c');
     } else {
-      setPresentationOptions({...presentationOptions, backgroundColor: bgColorPickerValue});
+      setPresentationOptions({ ...presentationOptions, backgroundColor: bgColorPickerValue });
     }
   }, [colorPickerValue, bgColorPickerValue]);
 
@@ -154,6 +157,11 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement, pre
                   <label><input type="button" value='center' onClick={() => handleAlignToSide('center')} /><img src={sideCenterIcon} /></label>
                   <label><input type="button" value='right' onClick={() => handleAlignToSide('right')} /><img src={sideRightIcon} /></label>
                 </div>
+              </div>
+              <span>Style</span>
+              <div className="settingGroup">
+                <label htmlFor="r" onDrag={(e) => handleLabelSlider(e, 'r')} onDragStart={() => handleLabelSliderStart('r')} draggable="true">Radius</label>
+                <input type="number" min={0} id="r" value={selectedElementObj.r} onChange={(e) => handleChangeElement(e, 'r')} />
               </div>
               <span>Color</span>
               <div className="settingGroup">

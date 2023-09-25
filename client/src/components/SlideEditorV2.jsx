@@ -42,7 +42,8 @@ function SlideEditor(props) {
             marginTop: element.y + '%',
             width: element.w + '%',
             height: element.h + '%',
-            backgroundColor: '#' + element.c
+            backgroundColor: '#' + element.c,
+            borderRadius: element.r + 'vh'
           }} />
     }
   }
