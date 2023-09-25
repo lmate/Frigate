@@ -26,7 +26,9 @@ function SlideEditor(props) {
             width: element.w + '%',
             fontSize: element.s + 'vh',
             color: '#' + element.c,
-            textAlign: element.a
+            textAlign: element.a,
+            fontStyle: element.fs,
+            fontWeight: element.fw
           }}
         />
       case 'rect':
@@ -154,24 +156,16 @@ function SlideEditor(props) {
       if (e.key.slice(0, 5) === 'Arrow') {
         switch (e.key.slice(5)) {
           case 'Up':
-            if (parseFloat(e.target.style.marginTop) > 0) {
-              e.target.style.marginTop = parseFloat(e.target.style.marginTop) - .2 + '%';
-            }
+            e.target.style.marginTop = parseFloat(e.target.style.marginTop) - .2 + '%';
             break;
           case 'Down':
-            if (parseFloat(e.target.style.marginTop) + parseFloat(e.target.style.height) < 60) {
-              e.target.style.marginTop = parseFloat(e.target.style.marginTop) + .2 + '%';
-            }
+            e.target.style.marginTop = parseFloat(e.target.style.marginTop) + .2 + '%';
             break;
           case 'Left':
-            if (parseFloat(e.target.style.marginLeft) > 0) {
-              e.target.style.marginLeft = parseFloat(e.target.style.marginLeft) - .3 + '%';
-            }
+            e.target.style.marginLeft = parseFloat(e.target.style.marginLeft) - .3 + '%';
             break;
           case 'Right':
-            if (parseFloat(e.target.style.marginLeft) + parseFloat(e.target.style.width) < 99) {
-              e.target.style.marginLeft = parseFloat(e.target.style.marginLeft) + .3 + '%';
-            }
+            e.target.style.marginLeft = parseFloat(e.target.style.marginLeft) + .3 + '%';
             break;
         }
       } else if (e.key === 'Delete') {
@@ -229,14 +223,7 @@ function SlideEditor(props) {
         convertElementPixelToPercentage(event.target);
         saveElementModification(event.target);
       },
-    },
-    inertia: true,
-    modifiers: [
-      interact.modifiers.restrictRect({
-        restriction: 'parent',
-        endOnly: true
-      })
-    ]
+    }
   });
 
   // Set texarea height when loading

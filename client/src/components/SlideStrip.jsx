@@ -9,7 +9,9 @@ function generateElement(element, index) {
         width: element.w + '%',
         fontSize: element.s + 'vh',
         color: '#' + element.c,
-        textAlign: element.a
+        textAlign: element.a,
+        fontStyle: element.fs,
+        fontWeight: element.fw
       }}>{element.v}</p>
     case 'rect':
       return <div

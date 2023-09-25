@@ -33,7 +33,6 @@ body {
   height: 9.3vh;
   cursor: pointer;
   padding-top: .6vh;
-  overflow: hidden;
 }
 
 .SlideStrip > div > div {
@@ -46,6 +45,8 @@ body {
   border-radius: 3vw;
   margin-left: 2vw;
   pointer-events: none;
+  overflow: hidden;
+  position: absolute;
 }
 
 .SlideStrip > div > p {
@@ -155,9 +156,9 @@ body {
   background-color: transparent;
   cursor: pointer;
   white-space: pre-line;
-  font-size: 18pt;
   padding: .2vw;
   z-index: 1;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .SlideEditor > div > div, .SlideStrip > div > div > div {
@@ -277,6 +278,17 @@ body {
   font-size: small;
   text-align: right;
   cursor: e-resize;
+}
+
+.ElementSettings > .settingGroup > select {
+  margin-left: .3vw;
+  margin-bottom: 1vh;
+  margin-top: 1.1vh;
+  border: 2px solid var(--primary);
+  outline: none;
+  border-radius: .3vw;
+  width: 5vw;
+  text-align: right;
 }
 
 .settingGroup > .colorPicker {

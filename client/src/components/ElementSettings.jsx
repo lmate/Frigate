@@ -8,6 +8,8 @@ import alignJustifyIcon from '../assets/align_justify_icon.svg';
 import sideLeftIcon from '../assets/side_left_icon.svg';
 import sideCenterIcon from '../assets/side_center_icon.svg';
 import sideRightIcon from '../assets/side_right_icon.svg';
+import styleNormalIcon from '../assets/style_normal_icon.svg';
+import styleItalicIcon from '../assets/style_italic_icon.svg';
 
 let labelSliderStartingValue = 0;
 
@@ -58,9 +60,9 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
     if (side === 'left') {
       handleChangeElement({ target: { value: 0 } }, 'x');
     } else if (side === 'center') {
-      handleChangeElement({ target: { value: (100 - selectedElementObj.w) / 2 } }, 'x');
+      handleChangeElement({ target: { value: Math.round(((100 - selectedElementObj.w) / 2) * 10) / 10} }, 'x');
     } else if (side === 'right') {
-      handleChangeElement({ target: { value: 99 - selectedElementObj.w } }, 'x');
+      handleChangeElement({ target: { value: Math.round((99 - selectedElementObj.w) * 10) / 10 } }, 'x');
     }
   }
 
@@ -96,6 +98,25 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
                   <label><input type="radio" value='center' name='textalign' checked={selectedElementObj.a === 'center' && true} readOnly /><img src={alignCenterIcon} /></label>
                   <label><input type="radio" value='right' name='textalign' checked={selectedElementObj.a === 'right' && true} readOnly /><img src={alignRightIcon} /></label>
                   <label><input type="radio" value='justify' name='textalign' checked={selectedElementObj.a === 'justify' && true} readOnly /><img src={alignJustifyIcon} /></label>
+                </div><br />
+
+                <label>Weight</label>
+                <select onChange={(e) => handleChangeElement(e, 'fw')}>
+                  <option selected={selectedElementObj.fw === '100' && true}>100</option>
+                  <option selected={selectedElementObj.fw === '200' && true}>200</option>
+                  <option selected={selectedElementObj.fw === '300' && true}>300</option>
+                  <option selected={selectedElementObj.fw === '400' && true}>400</option>
+                  <option selected={selectedElementObj.fw === '500' && true}>500</option>
+                  <option selected={selectedElementObj.fw === '600' && true}>600</option>
+                  <option selected={selectedElementObj.fw === '700' && true}>700</option>
+                  <option selected={selectedElementObj.fw === '800' && true}>800</option>
+                  <option selected={selectedElementObj.fw === '900' && true}>900</option>
+                </select><br />
+
+                <label style={{ cursor: 'auto', marginTop: '1vh', marginBottom: '1vh' }}>Style</label>
+                <div className="segmentedControl" onChange={(e) => handleChangeElement(e, 'fs')}>
+                  <label><input type="radio" value='' name='textstyle' checked={selectedElementObj.fs === '' && true} readOnly /><img src={styleNormalIcon} /></label>
+                  <label><input type="radio" value='italic' name='textstyle' checked={selectedElementObj.fs === 'italic' && true} readOnly /><img src={styleItalicIcon} /></label>
                 </div>
               </div>
               <span>Color</span>
