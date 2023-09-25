@@ -6,17 +6,18 @@ import SlideStrip from "./SlideStrip";
 import ToolBar from "./ToolBar";
 
 function Editor() {
+  const [presentationOptions, setPresentationOptions] = useState({backgroundColor: '#ffffff'});
   const [slides, setSlides] = useState([[]]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedElement, setSelectedElement] = useState(null);
 
   return (
     <>
-      <SlideStrip slides={slides} currentSlide={currentSlide} setCurrentSlide={(setIndex) => {setCurrentSlide(setIndex)}} setSlides={(slides) => {setSlides(slides)}}/>
-      <ElementSettings slides={slides} currentSlide={currentSlide} selectedElement={selectedElement} setSlides={(slides) => {setSlides(slides)}}/>
+      <SlideStrip presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides}/>
+      <ElementSettings presentationOptions={presentationOptions} setPresentationOptions={setPresentationOptions} slides={slides} currentSlide={currentSlide} selectedElement={selectedElement} setSlides={setSlides}/>
       <MenuBar />
-      <SlideEditorV2 slides={slides} currentSlide={currentSlide} setCurrentSlide={(setIndex) => {setCurrentSlide(setIndex)}} setSlides={(slides) => {setSlides(slides)}} setSelectedElement={setSelectedElement}/>
-      <ToolBar slides={slides} currentSlide={currentSlide} setSlides={(slides) => {setSlides(slides)}}/>
+      <SlideEditorV2 presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} setSelectedElement={setSelectedElement}/>
+      <ToolBar slides={slides} currentSlide={currentSlide} setSlides={setSlides}/>
     </>
   )
 }

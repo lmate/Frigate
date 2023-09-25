@@ -13,9 +13,10 @@ import styleItalicIcon from '../assets/style_italic_icon.svg';
 
 let labelSliderStartingValue = 0;
 
-function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
+function ElementSettings({ slides, setSlides, currentSlide, selectedElement, presentationOptions, setPresentationOptions }) {
   const [selectedElementObj, setSelectedElementObj] = useState(null);
   const [colorPickerValue, setColorPickerValue] = useState("#000000");
+  const [bgColorPickerValue, setBgColorPickerValue] = useState("#ffffff");
 
   useEffect(() => {
     if (selectedElement) {
@@ -46,13 +47,17 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
   useEffect(() => {
     if (selectedElement) {
       handleChangeElement({ target: { value: colorPickerValue.split('#')[1] } }, 'c');
+    } else {
+      setPresentationOptions({...presentationOptions, backgroundColor: bgColorPickerValue});
     }
-  }, [colorPickerValue]);
+  }, [colorPickerValue, bgColorPickerValue]);
 
   // Setting initial value of colorpicker
   useEffect(() => {
     if (selectedElement) {
       setColorPickerValue('#' + slides[currentSlide][parseInt(selectedElement.getAttribute('id').split('e')[1])].c);
+    } else {
+      setBgColorPickerValue(presentationOptions.backgroundColor);
     }
   }, [selectedElement]);
 
@@ -60,7 +65,7 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
     if (side === 'left') {
       handleChangeElement({ target: { value: 0 } }, 'x');
     } else if (side === 'center') {
-      handleChangeElement({ target: { value: Math.round(((100 - selectedElementObj.w) / 2) * 10) / 10} }, 'x');
+      handleChangeElement({ target: { value: Math.round(((100 - selectedElementObj.w) / 2) * 10) / 10 } }, 'x');
     } else if (side === 'right') {
       handleChangeElement({ target: { value: Math.round((99 - selectedElementObj.w) * 10) / 10 } }, 'x');
     }
@@ -68,6 +73,16 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
 
   return (
     <div className="ElementSettings">
+      {!selectedElementObj && (
+        <>
+          <span>Color</span>
+          <div className="settingGroup">
+            <HexColorPicker className="colorPicker" color={bgColorPickerValue} onChange={setBgColorPickerValue} />
+            <label htmlFor="bgc">HEX</label>
+            <HexColorInput id="bgc" className="colorInput" color={bgColorPickerValue} onChange={setBgColorPickerValue} />
+          </div>
+        </>
+      )}
       {selectedElementObj && (
         <>
           {(selectedElementObj.t === 'title' || selectedElementObj.t === 'text') && (
@@ -101,16 +116,10 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement }) {
                 </div><br />
 
                 <label>Weight</label>
-                <select onChange={(e) => handleChangeElement(e, 'fw')}>
-                  <option selected={selectedElementObj.fw === '100' && true}>100</option>
-                  <option selected={selectedElementObj.fw === '200' && true}>200</option>
-                  <option selected={selectedElementObj.fw === '300' && true}>300</option>
-                  <option selected={selectedElementObj.fw === '400' && true}>400</option>
-                  <option selected={selectedElementObj.fw === '500' && true}>500</option>
-                  <option selected={selectedElementObj.fw === '600' && true}>600</option>
-                  <option selected={selectedElementObj.fw === '700' && true}>700</option>
-                  <option selected={selectedElementObj.fw === '800' && true}>800</option>
-                  <option selected={selectedElementObj.fw === '900' && true}>900</option>
+                <select onChange={(e) => handleChangeElement(e, 'fw')} value={selectedElementObj.fw}>
+                  {[100, 200, 300, 400, 500, 600, 700, 800, 900].map((option) => (
+                    <option key={option}>{option}</option>
+                  ))}
                 </select><br />
 
                 <label style={{ cursor: 'auto', marginTop: '1vh', marginBottom: '1vh' }}>Style</label>

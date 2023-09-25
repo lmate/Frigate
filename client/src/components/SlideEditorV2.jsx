@@ -42,7 +42,7 @@ function SlideEditor(props) {
             marginTop: element.y + '%',
             width: element.w + '%',
             height: element.h + '%',
-            backgroundColor: '#' + element.c,
+            backgroundColor: '#' + element.c
           }} />
     }
   }
@@ -97,7 +97,6 @@ function SlideEditor(props) {
         x: roundTo1Decimal(parseFloat(target.style.marginLeft)),
         y: roundTo1Decimal(parseFloat(target.style.marginTop)),
         w: roundTo1Decimal(parseFloat(target.style.width)),
-        s: roundTo1Decimal(parseFloat(target.style.fontSize)),
       };
     } else if (target?.tagName === 'DIV') {
       modifiedSlides[props.currentSlide][parseInt(target.getAttribute('id').split('e')[1])] = {
@@ -235,7 +234,7 @@ function SlideEditor(props) {
 
   return (
     <div className="SlideEditor">
-      <div onClick={handleDeselectEveryElement}>
+      <div style={props.presentationOptions} onClick={handleDeselectEveryElement}>
         {props.slides && props.slides[props.currentSlide].map((element, index) => generateElement(element, index))}
       </div>
     </div>

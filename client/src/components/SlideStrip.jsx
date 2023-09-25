@@ -21,7 +21,7 @@ function generateElement(element, index) {
           marginTop: element.y + '%',
           width: element.w + '%',
           height: element.h + '%',
-          backgroundColor: '#' + element.c,
+          backgroundColor: '#' + element.c
         }} />
   }
 }
@@ -46,7 +46,7 @@ function SlideStrip(props) {
       {props.slides.map((slide, index) => (
         <div key={index} className={props.currentSlide === index ? 'selectedSlide' : ''} onClick={() => handleSelectSlide(index)}>
           <p>{index + 1}</p>
-          <div>
+          <div style={props.presentationOptions}>
             {props.slides[index].map((element, index) => generateElement(element, index))}
           </div>
         </div>
