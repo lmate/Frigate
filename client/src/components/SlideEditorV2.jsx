@@ -15,7 +15,7 @@ function SlideEditor(props) {
     switch (element.t) {
       case 'text':
         return <textarea
-          key={`${props.currentSlide}-${index}`}
+          key={`${props.currentSlide}-${index + props.forceReRender}`}
           defaultValue={element.v}
           id={`e${index}`}
           onClick={handleElementSelection}
@@ -151,7 +151,6 @@ function SlideEditor(props) {
 
   function handleMovingElementKeyboardEvents(e) {
     if (e.target.classList.contains('movingElement')) {
-      console.log('az')
       e.preventDefault();
       if (e.key.slice(0, 5) === 'Arrow') {
         switch (e.key.slice(5)) {

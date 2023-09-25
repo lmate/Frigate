@@ -15,7 +15,7 @@ function generateElement(element, index) {
       }}>{element.v}</p>
     case 'rect':
       return <div
-        key={element.v + index + 'mini'}
+        key={element.t + index + 'mini'}
         style={{
           marginLeft: element.x + '%',
           marginTop: element.y + '%',
