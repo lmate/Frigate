@@ -1,15 +1,69 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import passport from 'passport-local';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
-import userModel from "./model/User.js";
+import userModel from './model/User.js';
+
+import auth from './middleware.auth.js';
 
 const app = express();
 dotenv.config();
 app.use(express.json());
 
+app.get('/api/isloggedin', auth, (req, res) => {
+  res.status(200).json({ isloggedin: true });
+});
 
+app.post('/login', async (req, res) => {
+  try {
+    if (!(req.body.email && req.body.password)) {
+      return res.status(400).json({ res: 'All fields are required' });
+    }
+
+    const user = await userModel.findOne({ email: req.body.email.toLowerCase() });
+
+    if (user && await bcrypt.compare(req.body.password, user.password)) {
+
+      const token = jwt.sign({ user_id: user._id, email: user.email }, process.env.TOKEN_KEY, { expiresIn: "7d" });
+
+      return res.status(200).json({ id: user._id, token });
+
+    } else {
+      return res.status(200).json({ res: 'Invalid login' });
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post('/register', async (req, res) => {
+  try {
+    if (!(req.body.email && req.body.name && req.body.password)) {
+      return res.status(400).json({ res: 'All fields are required' });
+    }
+
+    const oldUser = await userModel.findOne({ email: req.body.email.toLowerCase() });
+    if (oldUser) {
+      return res.status(400).json({ res: 'User already exists' });
+    }
+
+    const encryptedPassword = await bcrypt.hash(req.body.password, 10);
+    const user = await userModel.create({
+      email: req.body.email.toLowerCase(),
+      name: req.body.name,
+      password: encryptedPassword
+    });
+
+    const token = jwt.sign({ user_id: user._id, email: user.email }, process.env.TOKEN_KEY, { expiresIn: "7d" });
+
+    return res.status(200).json({ id: user._id, token });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 
 
@@ -19,5 +73,3 @@ async function startup() {
   app.listen(3000, () => console.log('Started on http://localhost:3000'));
 }
 startup();
-
-
