@@ -5,16 +5,11 @@ function Auth() {
   const [loginOrRegister, setLoginOrRegister] = useState('login');
   const navigate = useNavigate();
 
-  // Check is logged in, if yes, redirect to dashboard
+  // Check if already logged in, if yes, redirect to dashboard
   useEffect(() => {
-    async function fetchIsloggedin() {
-      const response = await fetch('/api/isloggedin', {method: 'GET', headers: {'content-type': 'application/json', 'x-access-token': localStorage.getItem('token')}});
-      const data = await response.json();
-      if (data.isloggedin) {
-        navigate('/dashboard');
-      }
+    if (localStorage.getItem('id')) {
+      navigate('/dashboard');
     }
-    fetchIsloggedin();
   }, []);
 
   async function handleLogin(e) {

@@ -5,16 +5,13 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import userModel from './model/User.js';
+import presentationModel from './model/Presentation.js';
 
 import auth from './middleware.auth.js';
 
 const app = express();
 dotenv.config();
 app.use(express.json());
-
-app.get('/api/isloggedin', auth, (req, res) => {
-  res.status(200).json({ isloggedin: true });
-});
 
 app.post('/login', async (req, res) => {
   try {
@@ -65,7 +62,10 @@ app.post('/register', async (req, res) => {
   }
 });
 
-
+app.get('/api/user/:userid', auth, async (req, res) => {
+  const user = await userModel.findById(req.params.userid).populate('presentations');
+  res.status(200).json({name: user.name, presentations: user.presentations});
+});
 
 
 async function startup() {

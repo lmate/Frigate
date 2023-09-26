@@ -1,29 +1,34 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import Header from './Header';
 import PresentationList from './PresentationList';
 import PresentationPreview from './PresentationPreview';
 
 function Dashboard() {
+  const [user, setUser] = useState(null);
+
   const navigate = useNavigate();
 
-  async function test() {
-    const response = await fetch('/api/isloggedin', {method: 'GET', headers: {'content-type': 'application/json', 'x-access-token': localStorage.getItem('token')}});
-    const data = await response.json();
+  // Fetch userDate, redirect to auth if login not valid
+  useEffect(() => {
+    async function fetchUser() {
+      const response = await fetch(`/api/user/${localStorage.getItem('id')}`, {method: 'GET', headers: {'content-type': 'application/json', 'x-access-token': localStorage.getItem('token')}});
+      const user = await response.json();
 
-    if (data.invalidToken) {
-      return navigate('/auth');
+      if (user.invalidToken) {
+        console.log(user.msg);
+        localStorage.removeItem('token');
+        localStorage.removeItem('id');
+        return navigate('/auth');
+      }
+      setUser(user);
     }
-    
-    console.log('All good, you are authenticated');
-  }
-  test()
+    fetchUser();
+  }, []);
 
   return (
     <>
-    {/*
-    
-    */}
       <PresentationPreview />
       <Header />
       <PresentationList />
