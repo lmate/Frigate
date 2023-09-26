@@ -7,6 +7,7 @@ import PresentationPreview from './PresentationPreview';
 
 function Dashboard() {
   const [user, setUser] = useState(null);
+  const [selectedPresentationIndex, setSelectedPresentationIndex] = useState(0);
 
   const navigate = useNavigate();
 
@@ -31,9 +32,10 @@ function Dashboard() {
     <>
       {user && (
         <>
-          <PresentationPreview />
+          <PresentationPreview presentations={user.presentations} selectedPresentationIndex={selectedPresentationIndex} />
           <Header />
-          <PresentationList presentations={user.presentations} />
+          {console.log(user)}
+          <PresentationList presentations={user.presentations} setSelectedPresentationIndex={setSelectedPresentationIndex}/>
         </>
       )}
     </>
