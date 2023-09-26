@@ -153,7 +153,8 @@ body {
 }
 
 .SlideEditor>div>textarea,
-.SlideStrip>div>div>p {
+.SlideStrip>div>div>p,
+.PresentationList>div>div>p {
   position: absolute;
   resize: none;
   border: 0px solid black;
@@ -167,7 +168,8 @@ body {
 }
 
 .SlideEditor>div>div,
-.SlideStrip>div>div>div {
+.SlideStrip>div>div>div,
+.PresentationList>div>div>div {
   position: absolute;
   resize: none;
   border: 0px solid black;
@@ -344,8 +346,50 @@ body {
   float: right;
   width: 48.5vw;
   height: calc(90vh - 2vw);
-  background-color: var(--elementbg);
+}
+
+.PresentationList>div {
+  width: 48.5vw;
+  height: 14vh;
+  margin-bottom: 1vw;
   border-radius: 1vw;
+  background-color: var(--elementbg);
+  cursor: pointer;
+}
+
+.PresentationList>div>div {
+  margin-left: calc(48.5vw - (((78vh - 2vw) * 1.78) * .15) - .75vw);
+  margin-top: calc((14vh - ((78vh - 2vw) * .15)) / 2);
+  height: calc(78vh - 2vw);
+  width: calc((78vh - 2vw) * 1.78);
+  transform: scale(.15);
+  transform-origin: top left;
+  box-shadow: 0 5px 40px rgb(0 0 0 / 0.2);
+  border-radius: 5vw;
+  pointer-events: none;
+  overflow: hidden;
+  position: absolute;
+}
+
+.PresentationList>div>span:nth-of-type(1) {
+  position: absolute;
+  display: inline-block;
+  width: 32vw;
+  margin-left: 4vw;
+  margin-top: 3vh;
+  text-align: right;
+  color: var(--primary);
+  font-size: 1.1vw;
+}
+
+.PresentationList>div>span:nth-of-type(2) {
+  display: inline-block;
+  width: 32vw;
+  margin-left: 4vw;
+  margin-top: 10vh;
+  text-align: right;
+  color: var(--secondary);
+  font-size: .6vw;
 }
 
 .Header {

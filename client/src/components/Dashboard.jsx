@@ -10,10 +10,10 @@ function Dashboard() {
 
   const navigate = useNavigate();
 
-  // Fetch userDate, redirect to auth if login not valid
+  // Fetch userData, redirect to auth if login not valid
   useEffect(() => {
     async function fetchUser() {
-      const response = await fetch(`/api/user/${localStorage.getItem('id')}`, {method: 'GET', headers: {'content-type': 'application/json', 'x-access-token': localStorage.getItem('token')}});
+      const response = await fetch(`/api/user/${localStorage.getItem('id')}`, { method: 'GET', headers: { 'content-type': 'application/json', 'x-access-token': localStorage.getItem('token') } });
       const user = await response.json();
 
       if (user.invalidToken) {
@@ -29,9 +29,13 @@ function Dashboard() {
 
   return (
     <>
-      <PresentationPreview />
-      <Header />
-      <PresentationList />
+      {user && (
+        <>
+          <PresentationPreview />
+          <Header />
+          <PresentationList presentations={user.presentations} />
+        </>
+      )}
     </>
   )
 }

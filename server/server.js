@@ -63,7 +63,7 @@ app.post('/register', async (req, res) => {
 });
 
 app.get('/api/user/:userid', auth, async (req, res) => {
-  const user = await userModel.findById(req.params.userid).populate('presentations');
+  const user = await userModel.findById(req.params.userid).populate({path: 'presentations', options: { sort: { 'modifiedAt': -1 } } });
   res.status(200).json({name: user.name, presentations: user.presentations});
 });
 
