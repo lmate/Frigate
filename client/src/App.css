@@ -29,14 +29,14 @@ body {
   width: 0px;
 }
 
-.SlideStrip > div {
+.SlideStrip>div {
   width: 10vw;
   height: 9.3vh;
   cursor: pointer;
   padding-top: .6vh;
 }
 
-.SlideStrip > div > div {
+.SlideStrip>div>div {
   height: calc(78vh - 2vw);
   width: calc((78vh - 2vw) * 1.78);
   transform: scale(.115);
@@ -50,7 +50,7 @@ body {
   position: absolute;
 }
 
-.SlideStrip > div > p {
+.SlideStrip>div>p {
   float: left;
   margin-top: 3.5vh;
   width: 1.9vw;
@@ -60,18 +60,18 @@ body {
   font-size: small;
 }
 
-.SlideStrip > .selectedSlide {
+.SlideStrip>.selectedSlide {
   background-color: #d1dff1;
   border-left: 2px solid var(--primary);
   width: calc(10vw - 2px);
 }
 
-.SlideStrip > .selectedSlide > p {
+.SlideStrip>.selectedSlide>p {
   color: var(--primary);
   font-weight: 800;
 }
 
-.SlideStrip > .selectedSlide > div {
+.SlideStrip>.selectedSlide>div {
   border: 12px solid var(--primary);
   margin-left: calc(2vw - 2px);
 }
@@ -85,7 +85,7 @@ body {
   border-top-right-radius: 1vw;
 }
 
-.SlidesLogo > img {
+.SlidesLogo>img {
   width: 2vw;
   margin-left: 4vw;
   margin-top: 1vh;
@@ -100,7 +100,7 @@ body {
   background-image: linear-gradient(transparent, var(--elementbg), var(--elementbg), var(--elementbg));
 }
 
-.SlidesAdd > button {
+.SlidesAdd>button {
   width: 3vw;
   height: 3vw;
   margin-left: 3.5vw;
@@ -114,12 +114,15 @@ body {
   font-size: 2vw;
 }
 
-.SlidesAdd > button:active {
+.SlidesAdd>button:active {
   transform: scale(0.98);
   box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
 }
 
-.SlideStrip > div:nth-of-type(1), .SlideStrip > div:nth-last-of-type(1), .SlideStrip > div:nth-last-of-type(2), .SlideStrip > div:nth-last-of-type(3) {
+.SlideStrip>div:nth-of-type(1),
+.SlideStrip>div:nth-last-of-type(1),
+.SlideStrip>div:nth-last-of-type(2),
+.SlideStrip>div:nth-last-of-type(3) {
   cursor: default;
 }
 
@@ -139,7 +142,7 @@ body {
   border-top-right-radius: 1vw;
 }
 
-.SlideEditor > div {
+.SlideEditor>div {
   position: relative;
   overflow: hidden;
   background-color: var(--bg);
@@ -149,7 +152,8 @@ body {
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
 }
 
-.SlideEditor > div > textarea, .SlideStrip > div > div > p {
+.SlideEditor>div>textarea,
+.SlideStrip>div>div>p {
   position: absolute;
   resize: none;
   border: 0px solid black;
@@ -162,7 +166,8 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
-.SlideEditor > div > div, .SlideStrip > div > div > div {
+.SlideEditor>div>div,
+.SlideStrip>div>div>div {
   position: absolute;
   resize: none;
   border: 0px solid black;
@@ -194,7 +199,7 @@ body {
   border-bottom-right-radius: 1vw;
 }
 
-.ToolBar > div {
+.ToolBar>div {
   float: left;
   margin-top: .6vh;
   margin-left: 1vw;
@@ -206,7 +211,7 @@ body {
   cursor: pointer;
 }
 
-.ToolBar > div > img {
+.ToolBar>div>img {
   width: 2.5vh;
   height: 2.5vh;
   margin-left: 1.25vh;
@@ -214,18 +219,18 @@ body {
   filter: invert(51%) sepia(16%) saturate(190%) hue-rotate(172deg) brightness(98%) contrast(91%);
 }
 
-.ToolBar > div:hover {
+.ToolBar>div:hover {
   box-sizing: border-box;
   border: 2px solid var(--primary);
 }
 
-.ToolBar > div:hover > img {
+.ToolBar>div:hover>img {
   filter: invert(23%) sepia(93%) saturate(2345%) hue-rotate(210deg) brightness(95%) contrast(96%);
   margin-left: calc(1.25vh - 2px);
   margin-top: calc(1.25vh - 2px);
 }
 
-.ToolBar > div:active {
+.ToolBar>div:active {
   transform: scale(0.98);
   box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
 }
@@ -239,7 +244,7 @@ body {
   padding-top: 1vh;
 }
 
-.ElementSettings > .settingGroup {
+.ElementSettings>.settingGroup {
   width: calc((98vw - 12vw - ((78vh - .9vw) * 1.78)) - 2vw - 2px);
   border-left: 2px solid var(--primary);
   border-radius: 0vw;
@@ -247,7 +252,7 @@ body {
   padding-bottom: calc(1vw - 1vh);
 }
 
-.ElementSettings > span {
+.ElementSettings>span {
   display: inline-block;
   color: var(--primary);
   font-weight: 800;
@@ -257,7 +262,7 @@ body {
   padding-top: 2vh;
 }
 
-.ElementSettings > .settingGroup > input {
+.ElementSettings>.settingGroup>input {
   display: inline-block;
   width: 5vw;
   margin: .2vw;
@@ -269,7 +274,7 @@ body {
   text-align: right;
 }
 
-.ElementSettings > .settingGroup > label {
+.ElementSettings>.settingGroup>label {
   display: inline-block;
   min-width: 5%;
   margin-right: 2%;
@@ -281,7 +286,7 @@ body {
   cursor: e-resize;
 }
 
-.ElementSettings > .settingGroup > select {
+.ElementSettings>.settingGroup>select {
   margin-left: .3vw;
   margin-bottom: 1vh;
   margin-top: 1.1vh;
@@ -292,37 +297,59 @@ body {
   text-align: right;
 }
 
-.settingGroup > .colorPicker {
+.settingGroup>.colorPicker {
   width: 100%;
   height: 10vh;
   margin-bottom: 1vh;
 }
 
-.settingGroup > .colorInput {
+.settingGroup>.colorInput {
   margin-bottom: 1vh;
 }
 
-.settingGroup > .segmentedControl {
+.settingGroup>.segmentedControl {
   display: inline-block;
   position: absolute;
   margin-top: .4vh;
   margin-left: .3vw;
 }
 
-.settingGroup > .segmentedControl > label > input {
+.settingGroup>.segmentedControl>label>input {
   display: none;
 }
 
-.settingGroup > .segmentedControl > label > img {
+.settingGroup>.segmentedControl>label>img {
   filter: invert(51%) sepia(16%) saturate(190%) hue-rotate(172deg) brightness(98%) contrast(91%);
   padding: .1vw;
   cursor: pointer;
 }
 
-.settingGroup > .segmentedControl > label > input:checked + img {
+.settingGroup>.segmentedControl>label>input:checked+img {
   filter: invert(23%) sepia(93%) saturate(2345%) hue-rotate(210deg) brightness(95%) contrast(96%);
 }
 
-.settingGroup > .segmentedControl > label > input:active + img {
+.settingGroup>.segmentedControl>label>input:active+img {
   filter: invert(23%) sepia(93%) saturate(2345%) hue-rotate(210deg) brightness(95%) contrast(96%);
+}
+
+.PresentationPreview {
+  float: left;
+  width: 48.5vw;
+  height: calc(100vh - 2vw);
+  background-color: var(--elementbg);
+  border-radius: 1vw;
+}
+
+.PresentationList {
+  float: right;
+  width: 48.5vw;
+  height: calc(90vh - 2vw);
+  background-color: var(--elementbg);
+  border-radius: 1vw;
+}
+
+.Header {
+  float: right;
+  width: 48.5vw;
+  height: 10vh;
 }
