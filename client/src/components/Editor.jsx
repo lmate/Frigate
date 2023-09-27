@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
+
 import ElementSettings from "./ElementSettings";
 import MenuBar from "./MenuBar";
 import SlideEditorV2 from "./SlideEditorV2";
@@ -16,6 +18,33 @@ function Editor() {
   const [changeHistory, setChangeHistory] = useState([{ presentationOptions: {}, slides: [[]], currentSlide: 0 }]);
   // Used to force the rerender of textareas, useful when undo does not change the elements key
   const [forceReRender, setForceReRender] = useState(Date.now());
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { presentationid } = useParams();
+
+  // If a presentation is passed from Dashboard, show it, if not (the url was written manually), fetch it 
+  useEffect(() => {
+    async function decideIfFetchPresentation() {
+      if (location.state?.presentation) {
+        setSlides(location.state.presentation.data.slides);
+        setPresentationOptions(location.state.presentation.data.presentationOptions);
+      } else if (presentationid) {
+        const response = await fetch(`/api/user/${localStorage.getItem('id')}/presentation/${presentationid}`, { method: 'GET', headers: { 'content-type': 'application/json', 'x-access-token': localStorage.getItem('token') } });
+        const presentation = await response.json();
+
+        if (presentation.invalidToken) {
+          console.log(presentation.msg);
+          localStorage.removeItem('token');
+          localStorage.removeItem('id');
+          return navigate('/auth');
+        }
+        setSlides(JSON.parse(presentation.data).slides);
+        setPresentationOptions(JSON.parse(presentation.data).presentationOptions);
+      }
+    }
+    decideIfFetchPresentation();
+  }, []);
 
   // Undo state setting event emitters
   undoKeyboardEventListenerAbortController.abort();

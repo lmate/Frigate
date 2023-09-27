@@ -34,7 +34,6 @@ function Dashboard() {
         <>
           <PresentationPreview presentations={user.presentations} selectedPresentationIndex={selectedPresentationIndex} />
           <Header />
-          {console.log(user)}
           <PresentationList presentations={user.presentations} setSelectedPresentationIndex={setSelectedPresentationIndex}/>
         </>
       )}

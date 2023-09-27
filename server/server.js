@@ -67,6 +67,11 @@ app.get('/api/user/:userid', auth, async (req, res) => {
   res.status(200).json({name: user.name, presentations: user.presentations});
 });
 
+app.get('/api/user/:userid/presentation/:presentationid', auth, async (req, res) => {
+  const presentation = await presentationModel.findById(req.params.presentationid);
+  res.status(200).json(presentation);
+});
+
 
 async function startup() {
   await mongoose.connect(process.env.DB_URL);

@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     element: <Dashboard />,
   },
   {
-    path: "/edit",
+    path: "/edit/:presentationid",
     element: <Editor />
   },
   {

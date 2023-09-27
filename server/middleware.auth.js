@@ -1,8 +1,11 @@
 import jwt from 'jsonwebtoken';
 
-const verifyToken = (req, res, next) => {
+import userModel from './model/User.js';
+
+const verifyToken = async (req, res, next) => {
   const token = req.headers["x-access-token"];
   const userid = req.params.userid;
+  const presentationid = req.params.presentationid;
 
   // Check if there is a token
   if (!token) {
@@ -14,11 +17,19 @@ const verifyToken = (req, res, next) => {
     return res.status(200).json({invalidToken: true, msg: 'Not authorized to access this resource'});
   }
 
+  // If a presentation is accessed, check if the user owns that presentation
+  if (presentationid) {
+    const user = await userModel.findById(userid);
+    if (!user.presentations.includes(presentationid)) {
+      return res.status(200).json({invalidToken: true, msg: 'Not authorized to access this resource'});
+    }
+  }
+
   // Check if the token is valid and not expired
   try {
     jwt.verify(token, process.env.TOKEN_KEY);
   } catch (err) {
-    return res.status(200).json({invalidToken: true, msg: 'Token not valid or expired'});
+    return res.status(200).json({invalidToken: true, msg: 'Token invalid or expired'});
   }
   return next();
 };
