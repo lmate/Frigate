@@ -384,6 +384,11 @@ body {
   cursor: pointer;
 }
 
+.PresentationPreview>div:nth-of-type(2)>.disabled {
+  pointer-events: none;
+  background-color: #d8dddf;
+}
+
 .PresentationPreview>div:nth-of-type(2)>div:active {
   transform: scale(.95);
   box-shadow: 0 0 5px rgb(0 0 0 / 0.1);

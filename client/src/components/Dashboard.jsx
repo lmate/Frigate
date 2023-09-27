@@ -26,7 +26,7 @@ function Dashboard() {
       setUser(user);
     }
     fetchUser();
-  }, []);
+  }, [navigate]);
 
   return (
     <>
