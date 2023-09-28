@@ -16,6 +16,7 @@ function Editor() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedElement, setSelectedElement] = useState(null);
   const [changeHistory, setChangeHistory] = useState([{ presentationOptions: {}, slides: [[]], currentSlide: 0 }]);
+  const [presentationTitle, setPresentationTitle] = useState(null);
   // Used to force the rerender of textareas, useful when undo does not change the elements key
   const [forceReRender, setForceReRender] = useState(Date.now());
 
@@ -29,6 +30,8 @@ function Editor() {
       if (location.state?.presentation) {
         setSlides(location.state.presentation.data.slides);
         setPresentationOptions(location.state.presentation.data.presentationOptions);
+        setPresentationTitle(location.state.presentation.title);
+
       } else if (presentationid) {
         const response = await fetch(`/api/user/${localStorage.getItem('id')}/presentation/${presentationid}`, { method: 'GET', headers: { 'content-type': 'application/json', 'x-access-token': localStorage.getItem('token') } });
         const presentation = await response.json();
@@ -41,6 +44,7 @@ function Editor() {
         }
         setSlides(JSON.parse(presentation.data).slides);
         setPresentationOptions(JSON.parse(presentation.data).presentationOptions);
+        setPresentationTitle(presentation.title);
       }
     }
     decideIfFetchPresentation();
@@ -83,11 +87,15 @@ function Editor() {
     }
   }
 
+  function handleSave() {
+    console.log('saving');
+  }
+
   return (
     <>
       <SlideStrip presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} />
       <ElementSettings presentationOptions={presentationOptions} setPresentationOptions={setPresentationOptions} slides={slides} currentSlide={currentSlide} selectedElement={selectedElement} setSlides={setSlides} />
-      <MenuBar />
+      <MenuBar handleSave={handleSave} presentationTitle={presentationTitle} setPresentationTitle={setPresentationTitle}/>
       <SlideEditorV2 forceReRender={forceReRender} presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} setSelectedElement={setSelectedElement} />
       <ToolBar slides={slides} currentSlide={currentSlide} setSlides={setSlides} />
     </>

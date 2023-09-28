@@ -132,6 +132,10 @@ body {
   margin-left: 11vw;
 }
 
+.MenuBar > input {
+  background-color: none;
+}
+
 .SlideEditor {
   height: calc(78vh - 2vw);
   width: calc((78vh - 2vw) * 1.78);
