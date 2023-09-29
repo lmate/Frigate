@@ -134,6 +134,50 @@ body {
 
 .MenuBar > input {
   background-color: none;
+  border: 0px solid black;
+  font-size: 1.4vw;
+  width: calc(((78vh - .9vw) * 1.78) * .85);
+  font-weight: 600;
+  color: var(--primary);
+  outline: none;
+  height: 1.4vw;
+  margin-top: calc((10vh - 1.4vw) / 2);
+  margin-left: 1vw;
+  position: absolute;
+}
+
+.MenuBar>div {
+  float: right;
+  margin-top: 2.5vh;
+  margin-right: 1vw;
+  width: 5vh;
+  height: 5vh;
+  background-color: var(--bg);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
+  border-radius: .5vw;
+  cursor: pointer;
+}
+
+.MenuBar>div>img {
+  width: 2.5vh;
+  height: 2.5vh;
+  margin-left: 1.25vh;
+  margin-top: 1.25vh;
+  filter: invert(51%) sepia(16%) saturate(190%) hue-rotate(172deg) brightness(98%) contrast(91%);
+}
+
+.MenuBar>div:active {
+  transform: scale(0.98);
+  box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+.MenuBar>span {
+  display: inline-flex;
+  color: var(--secondary);
+  font-size: .6vw;
+  height: 10vh;
+  margin-left: calc(((78vh - .9vw) * 1.78) - 6.5vw);
+  align-items: center;
 }
 
 .SlideEditor {
