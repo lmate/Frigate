@@ -17,6 +17,7 @@ function Editor() {
   const [selectedElement, setSelectedElement] = useState(null);
   const [changeHistory, setChangeHistory] = useState([{ presentationOptions: {}, slides: [[]], currentSlide: 0 }]);
   const [presentationTitle, setPresentationTitle] = useState(null);
+  const [isSaved, setIsSaved] = useState(true);
   // Used to force the rerender of textareas, useful when undo does not change the elements key
   const [forceReRender, setForceReRender] = useState(Date.now());
 
@@ -53,7 +54,7 @@ function Editor() {
   // Undo state setting event emitters
   undoKeyboardEventListenerAbortController.abort();
   undoKeyboardEventListenerAbortController = new AbortController();
-  document.addEventListener('keydown', restoreToLastChangeHistoryState, { signal: undoKeyboardEventListenerAbortController.signal });
+  document.addEventListener('keydown', handleKeyboardShortcuts, { signal: undoKeyboardEventListenerAbortController.signal });
   useEffect(() => {
     createNewChangeHistoryState();
   }, [presentationOptions, slides, currentSlide]);
@@ -71,10 +72,11 @@ function Editor() {
     }
   }
 
-  function restoreToLastChangeHistoryState(e) {
+  function handleKeyboardShortcuts(e) {
+    e.preventDefault();
+    // Undo
     if (e.ctrlKey && e.key === 'z') {
-      e.preventDefault();
-      if (changeHistory.length > 1) {
+      if (changeHistory.length > 1 && JSON.stringify(changeHistory.at(-2).presentationOptions) !== '{}') {
         const newChangeHistory = structuredClone(changeHistory);
         newChangeHistory.pop();
         setChangeHistory(newChangeHistory);
@@ -84,18 +86,37 @@ function Editor() {
         setSelectedElement(null);
         setForceReRender(Date.now());
       }
+    // Save
+    } else if (e.ctrlKey && e.key === 's') {
+      handleSave();
     }
   }
 
-  function handleSave() {
-    console.log('saving');
+  // Listen for presentation changes, know that a new save should happen
+  useEffect(() => {
+    setIsSaved(false);
+  }, [presentationOptions, slides, presentationTitle]);
+
+  async function handleSave() {
+    if (!isSaved) {
+      const response = await fetch(`/api/user/${localStorage.getItem('id')}/presentation/${presentationid}`, { method: 'PUT', headers: { 'content-type': 'application/json', 'x-access-token': localStorage.getItem('token') }, body: JSON.stringify({title: presentationTitle, data: JSON.stringify({slides, presentationOptions})}) });
+      const saved = await response.json();
+
+      if (saved.invalidToken) {
+        console.log(saved.msg);
+        localStorage.removeItem('token');
+        localStorage.removeItem('id');
+        return navigate('/auth');
+      }
+      setIsSaved(true);
+    }
   }
 
   return (
     <>
       <SlideStrip presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} />
       <ElementSettings presentationOptions={presentationOptions} setPresentationOptions={setPresentationOptions} slides={slides} currentSlide={currentSlide} selectedElement={selectedElement} setSlides={setSlides} />
-      <MenuBar handleSave={handleSave} presentationTitle={presentationTitle} setPresentationTitle={setPresentationTitle}/>
+      <MenuBar isSaved={isSaved} handleSave={handleSave} presentationTitle={presentationTitle} setPresentationTitle={setPresentationTitle}/>
       <SlideEditorV2 forceReRender={forceReRender} presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} setSelectedElement={setSelectedElement} />
       <ToolBar slides={slides} currentSlide={currentSlide} setSlides={setSlides} />
     </>

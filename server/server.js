@@ -72,6 +72,11 @@ app.get('/api/user/:userid/presentation/:presentationid', auth, async (req, res)
   res.status(200).json(presentation);
 });
 
+app.put('/api/user/:userid/presentation/:presentationid', auth, async (req, res) => {
+  const presentation = await presentationModel.findByIdAndUpdate(req.params.presentationid, {title: req.body.title, data: req.body.data, modifiedAt: Date.now()});
+  res.status(200).json(presentation);
+});
+
 
 async function startup() {
   await mongoose.connect(process.env.DB_URL);
