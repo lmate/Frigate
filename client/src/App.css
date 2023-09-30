@@ -166,6 +166,17 @@ body {
   filter: invert(51%) sepia(16%) saturate(190%) hue-rotate(172deg) brightness(98%) contrast(91%);
 }
 
+.MenuBar>div>.loadIcon {
+  animation: spin 2s linear infinite;
+  filter: invert(51%) sepia(16%) saturate(190%) hue-rotate(172deg) brightness(98%) contrast(91%);
+}
+
+@keyframes spin{
+	100%{
+		transform: rotate(360deg);
+	}
+}
+
 .MenuBar>div:active {
   transform: scale(0.98);
   box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
@@ -178,6 +189,10 @@ body {
   height: 10vh;
   margin-left: calc(((78vh - .9vw) * 1.78) - 6.5vw);
   align-items: center;
+}
+
+.displayNone {
+  display: none;
 }
 
 .SlideEditor {

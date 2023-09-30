@@ -9,6 +9,7 @@ import ToolBar from "./ToolBar";
 
 let undoKeyboardEventListenerAbortController = new AbortController();
 let lastAddedNewUndoSaveStateAt = Date.now();
+let lastSavedAt = Date.now();
 
 function Editor() {
   const [presentationOptions, setPresentationOptions] = useState({ backgroundColor: '#ffffff' });
@@ -18,6 +19,7 @@ function Editor() {
   const [changeHistory, setChangeHistory] = useState([{ presentationOptions: {}, slides: [[]], currentSlide: 0 }]);
   const [presentationTitle, setPresentationTitle] = useState(null);
   const [isSaved, setIsSaved] = useState(true);
+  const [isInSavingProcess, setIsInSavingProcess] = useState(false);
   // Used to force the rerender of textareas, useful when undo does not change the elements key
   const [forceReRender, setForceReRender] = useState(Date.now());
 
@@ -98,7 +100,9 @@ function Editor() {
   }, [presentationOptions, slides, presentationTitle]);
 
   async function handleSave() {
-    if (!isSaved) {
+    if (!isSaved && lastSavedAt + 1000 < Date.now()) {
+      lastSavedAt = Date.now();
+      setIsInSavingProcess(true);
       const response = await fetch(`/api/user/${localStorage.getItem('id')}/presentation/${presentationid}`, { method: 'PUT', headers: { 'content-type': 'application/json', 'x-access-token': localStorage.getItem('token') }, body: JSON.stringify({title: presentationTitle, data: JSON.stringify({slides, presentationOptions})}) });
       const saved = await response.json();
 
@@ -109,6 +113,7 @@ function Editor() {
         return navigate('/auth');
       }
       setIsSaved(true);
+      setIsInSavingProcess(false);
     }
   }
 
@@ -116,7 +121,7 @@ function Editor() {
     <>
       <SlideStrip presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} />
       <ElementSettings presentationOptions={presentationOptions} setPresentationOptions={setPresentationOptions} slides={slides} currentSlide={currentSlide} selectedElement={selectedElement} setSlides={setSlides} />
-      <MenuBar isSaved={isSaved} handleSave={handleSave} presentationTitle={presentationTitle} setPresentationTitle={setPresentationTitle}/>
+      <MenuBar isSaved={isSaved} isInSavingProcess={isInSavingProcess} handleSave={handleSave} presentationTitle={presentationTitle} setPresentationTitle={setPresentationTitle}/>
       <SlideEditorV2 forceReRender={forceReRender} presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} setSelectedElement={setSelectedElement} />
       <ToolBar slides={slides} currentSlide={currentSlide} setSlides={setSlides} />
     </>
