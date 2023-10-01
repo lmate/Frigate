@@ -89,6 +89,7 @@ body {
   width: 2vw;
   margin-left: 4vw;
   margin-top: 1vh;
+  cursor: pointer;
 }
 
 .SlidesAdd {

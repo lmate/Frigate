@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 
 import ElementSettings from "./ElementSettings";
@@ -9,7 +9,8 @@ import ToolBar from "./ToolBar";
 
 let undoKeyboardEventListenerAbortController = new AbortController();
 let lastAddedNewUndoSaveStateAt = Date.now();
-let lastSavedAt = Date.now();
+let lastSavedAt = Date.now() - 2000;
+let autoSaveTimer;
 
 function Editor() {
   const [presentationOptions, setPresentationOptions] = useState({ backgroundColor: '#ffffff' });
@@ -26,6 +27,12 @@ function Editor() {
   const navigate = useNavigate();
   const location = useLocation();
   const { presentationid } = useParams();
+  
+  // Store the always up to date states for the save function, so when saving, we dont have to deal with older state values
+  const currentPresentationData = useRef();
+  currentPresentationData.current = JSON.stringify({ title: presentationTitle, data: JSON.stringify({ slides, presentationOptions }) });
+  const isSavedRef = useRef();
+  isSavedRef.current = isSaved;
 
   // If a presentation is passed from Dashboard, show it, if not (the url was written manually), fetch it 
   useEffect(() => {
@@ -51,6 +58,7 @@ function Editor() {
       }
     }
     decideIfFetchPresentation();
+    handleSave();
   }, []);
 
   // Undo state setting event emitters
@@ -75,9 +83,9 @@ function Editor() {
   }
 
   function handleKeyboardShortcuts(e) {
-    e.preventDefault();
     // Undo
     if (e.ctrlKey && e.key === 'z') {
+      e.preventDefault();
       if (changeHistory.length > 1 && JSON.stringify(changeHistory.at(-2).presentationOptions) !== '{}') {
         const newChangeHistory = structuredClone(changeHistory);
         newChangeHistory.pop();
@@ -88,8 +96,9 @@ function Editor() {
         setSelectedElement(null);
         setForceReRender(Date.now());
       }
-    // Save
+      // Save
     } else if (e.ctrlKey && e.key === 's') {
+      e.preventDefault();
       handleSave();
     }
   }
@@ -100,10 +109,12 @@ function Editor() {
   }, [presentationOptions, slides, presentationTitle]);
 
   async function handleSave() {
-    if (!isSaved && lastSavedAt + 1000 < Date.now()) {
+    clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(handleSave, 60000);
+    if (!isSavedRef.current && lastSavedAt + 1000 < Date.now()) {
       lastSavedAt = Date.now();
       setIsInSavingProcess(true);
-      const response = await fetch(`/api/user/${localStorage.getItem('id')}/presentation/${presentationid}`, { method: 'PUT', headers: { 'content-type': 'application/json', 'x-access-token': localStorage.getItem('token') }, body: JSON.stringify({title: presentationTitle, data: JSON.stringify({slides, presentationOptions})}) });
+      const response = await fetch(`/api/user/${localStorage.getItem('id')}/presentation/${presentationid}`, { method: 'PUT', headers: { 'content-type': 'application/json', 'x-access-token': localStorage.getItem('token') }, body: currentPresentationData.current });
       const saved = await response.json();
 
       if (saved.invalidToken) {
@@ -121,7 +132,7 @@ function Editor() {
     <>
       <SlideStrip presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} />
       <ElementSettings presentationOptions={presentationOptions} setPresentationOptions={setPresentationOptions} slides={slides} currentSlide={currentSlide} selectedElement={selectedElement} setSlides={setSlides} />
-      <MenuBar isSaved={isSaved} isInSavingProcess={isInSavingProcess} handleSave={handleSave} presentationTitle={presentationTitle} setPresentationTitle={setPresentationTitle}/>
+      <MenuBar isSaved={isSaved} isInSavingProcess={isInSavingProcess} handleSave={handleSave} presentationTitle={presentationTitle} setPresentationTitle={setPresentationTitle} />
       <SlideEditorV2 forceReRender={forceReRender} presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} setSelectedElement={setSelectedElement} />
       <ToolBar slides={slides} currentSlide={currentSlide} setSlides={setSlides} />
     </>

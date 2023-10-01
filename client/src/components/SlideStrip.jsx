@@ -1,7 +1,11 @@
+import { useNavigate } from "react-router-dom";
+
 import logo from '../assets/logo.svg';
 import generateNonInteractiveElement from '../generateNonInteractiveElement';
 
 function SlideStrip(props) {
+
+  const navigate = useNavigate();
 
   function handleSelectSlide(selectedIndex) {
     props.setCurrentSlide(selectedIndex);
@@ -17,7 +21,7 @@ function SlideStrip(props) {
 
   return (
     <div className="SlideStrip">
-      <div className="SlidesLogo"><img src={logo} /></div>
+      <div className="SlidesLogo"><img src={logo} onClick={() => navigate('/dashboard')} /></div>
       {props.slides.map((slide, index) => (
         <div key={index} className={props.currentSlide === index ? 'selectedSlide' : ''} onClick={() => handleSelectSlide(index)}>
           <p>{index + 1}</p>
