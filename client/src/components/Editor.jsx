@@ -27,7 +27,7 @@ function Editor() {
   const navigate = useNavigate();
   const location = useLocation();
   const { presentationid } = useParams();
-  
+
   // Store the always up to date states for the save function, so when saving, we dont have to deal with older state values
   const currentPresentationData = useRef();
   currentPresentationData.current = JSON.stringify({ title: presentationTitle, data: JSON.stringify({ slides, presentationOptions }) });
@@ -41,7 +41,6 @@ function Editor() {
         setSlides(location.state.presentation.data.slides);
         setPresentationOptions(location.state.presentation.data.presentationOptions);
         setPresentationTitle(location.state.presentation.title);
-
       } else if (presentationid) {
         const response = await fetch(`/api/user/${localStorage.getItem('id')}/presentation/${presentationid}`, { method: 'GET', headers: { 'content-type': 'application/json', 'x-access-token': localStorage.getItem('token') } });
         const presentation = await response.json();
@@ -58,29 +57,12 @@ function Editor() {
       }
     }
     decideIfFetchPresentation();
-    handleSave();
   }, []);
 
-  // Undo state setting event emitters
+  // Keyboard shortcut event emitters
   undoKeyboardEventListenerAbortController.abort();
   undoKeyboardEventListenerAbortController = new AbortController();
   document.addEventListener('keydown', handleKeyboardShortcuts, { signal: undoKeyboardEventListenerAbortController.signal });
-  useEffect(() => {
-    createNewChangeHistoryState();
-  }, [presentationOptions, slides, currentSlide]);
-
-  function createNewChangeHistoryState() {
-    if (lastAddedNewUndoSaveStateAt + 500 < Date.now()) {
-      lastAddedNewUndoSaveStateAt = Date.now();
-      const newChangeHistory = structuredClone(changeHistory);
-      if (JSON.stringify(newChangeHistory.at(-1)) !== JSON.stringify({ presentationOptions, slides, currentSlide })) {
-        if (newChangeHistory.length > 500) {
-          newChangeHistory.shift();
-        }
-        setChangeHistory([...newChangeHistory, { presentationOptions, slides, currentSlide }]);
-      }
-    }
-  }
 
   function handleKeyboardShortcuts(e) {
     // Undo
@@ -103,10 +85,36 @@ function Editor() {
     }
   }
 
+  // Listen for changes and create new change history state
+  useEffect(() => {
+    createNewChangeHistoryState();
+  }, [presentationOptions, slides, currentSlide]);
+
+  function createNewChangeHistoryState() {
+    if (lastAddedNewUndoSaveStateAt + 500 < Date.now()) {
+      lastAddedNewUndoSaveStateAt = Date.now();
+      const newChangeHistory = structuredClone(changeHistory);
+      if (JSON.stringify(newChangeHistory.at(-1)) !== JSON.stringify({ presentationOptions, slides, currentSlide })) {
+        if (newChangeHistory.length > 500) {
+          newChangeHistory.shift();
+        }
+        setChangeHistory([...newChangeHistory, { presentationOptions, slides, currentSlide }]);
+      }
+    }
+  }
+
   // Listen for presentation changes, know that a new save should happen
   useEffect(() => {
     setIsSaved(false);
   }, [presentationOptions, slides, presentationTitle]);
+
+  // Save changes when user leaves the page
+  useEffect(() => {
+    window.addEventListener('beforeunload', (e) => {
+      e.preventDefault();
+      handleSave();
+    });
+  }, []);
 
   async function handleSave() {
     clearTimeout(autoSaveTimer);
