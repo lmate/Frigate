@@ -29,7 +29,7 @@ function PresentationPreview({ presentations, selectedPresentationIndex }) {
   }
 
   function handleStartEdit() {
-    navigate(`/edit/${selectedPresentation._id}`, {state: {presentation: selectedPresentation}});
+    navigate(`/edit/${selectedPresentation._id}`, {state: {presentation: selectedPresentation, sentAt: Date.now()}});
   }
 
   return (

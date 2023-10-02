@@ -38,7 +38,8 @@ function Editor() {
   // If a presentation is passed from Dashboard, show it, if not (the url was written manually), fetch it 
   useEffect(() => {
     async function decideIfFetchPresentation() {
-      if (location.state?.presentation) {
+      console.log(location.state?.sentAt + 1000, Date.now());
+      if (location.state?.presentation && location.state?.sentAt + 1000 > Date.now()) {
         setSlides(location.state.presentation.data.slides);
         setPresentationOptions(location.state.presentation.data.presentationOptions);
         setPresentationTitle(location.state.presentation.title);
@@ -120,6 +121,7 @@ function Editor() {
   useEffect(() => {
     window.addEventListener('beforeunload', (e) => {
       e.preventDefault();
+      location.state = null;
       handleSave();
     });
   }, []);

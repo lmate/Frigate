@@ -11,7 +11,7 @@ function PresentationList({ presentations, setSelectedPresentationIndex }) {
   }
 
   function handleStartEdit(presentationId, presentation) {
-    navigate(`/edit/${presentationId}`, {state: {presentation: {...presentation, data: JSON.parse(presentation.data)}}});
+    navigate(`/edit/${presentationId}`, {state: {presentation: {...presentation, data: JSON.parse(presentation.data)}, sentAt: Date.now()}});
   }
 
   return (
