@@ -18,7 +18,7 @@ function Editor() {
   const [slides, setSlides] = useState([[]]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedElement, setSelectedElement] = useState(null);
-  const [changeHistory, setChangeHistory] = useState([{ presentationOptions: {}, slides: [[]], currentSlide: 0 }]);
+  const [changeHistory, setChangeHistory] = useState(null);
   const [presentationTitle, setPresentationTitle] = useState(null);
   const [isSaved, setIsSaved] = useState(true);
   const [isInSavingProcess, setIsInSavingProcess] = useState(false);
@@ -73,7 +73,7 @@ function Editor() {
     // Undo
     if (e.ctrlKey && e.key === 'z') {
       e.preventDefault();
-      if (changeHistory.length > 1 && JSON.stringify(changeHistory.at(-2).presentationOptions) !== '{}') {
+      if (changeHistory.length > 1) {
         const newChangeHistory = structuredClone(changeHistory);
         newChangeHistory.pop();
         setChangeHistory(newChangeHistory);
@@ -96,15 +96,19 @@ function Editor() {
   }, [presentationOptions, slides, currentSlide]);
 
   function createNewChangeHistoryState() {
-    if (lastAddedNewUndoSaveStateAt + 500 < Date.now()) {
-      lastAddedNewUndoSaveStateAt = Date.now();
-      const newChangeHistory = structuredClone(changeHistory);
-      if (JSON.stringify(newChangeHistory.at(-1)) !== JSON.stringify({ presentationOptions, slides, currentSlide })) {
-        if (newChangeHistory.length > 500) {
-          newChangeHistory.shift();
+    if (firstRenderAt + 1000 < Date.now()) {
+      if (lastAddedNewUndoSaveStateAt + 500 < Date.now()) {
+        lastAddedNewUndoSaveStateAt = Date.now();
+        const newChangeHistory = structuredClone(changeHistory);
+        if (JSON.stringify(newChangeHistory.at(-1)) !== JSON.stringify({ presentationOptions, slides, currentSlide })) {
+          if (newChangeHistory.length > 500) {
+            newChangeHistory.shift();
+          }
+          setChangeHistory([...newChangeHistory, { presentationOptions, slides, currentSlide }]);
         }
-        setChangeHistory([...newChangeHistory, { presentationOptions, slides, currentSlide }]);
       }
+    } else {
+      setChangeHistory([{ presentationOptions, slides, currentSlide }]);
     }
   }
 
