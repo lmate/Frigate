@@ -10,6 +10,7 @@ import ToolBar from "./ToolBar";
 let undoKeyboardEventListenerAbortController = new AbortController();
 let lastAddedNewUndoSaveStateAt = Date.now();
 let lastSavedAt = Date.now() - 2000;
+let firstRenderAt;
 let autoSaveTimer;
 
 function Editor() {
@@ -41,6 +42,9 @@ function Editor() {
         setSlides(location.state.presentation.data.slides);
         setPresentationOptions(location.state.presentation.data.presentationOptions);
         setPresentationTitle(location.state.presentation.title);
+
+        firstRenderAt = Date.now();
+
       } else if (presentationid) {
         const response = await fetch(`/api/user/${localStorage.getItem('id')}/presentation/${presentationid}`, { method: 'GET', headers: { 'content-type': 'application/json', 'x-access-token': localStorage.getItem('token') } });
         const presentation = await response.json();
@@ -54,6 +58,8 @@ function Editor() {
         setSlides(JSON.parse(presentation.data).slides);
         setPresentationOptions(JSON.parse(presentation.data).presentationOptions);
         setPresentationTitle(presentation.title);
+
+        firstRenderAt = Date.now();
       }
     }
     decideIfFetchPresentation();
@@ -105,7 +111,9 @@ function Editor() {
 
   // Listen for presentation changes, know that a new save should happen
   useEffect(() => {
-    setIsSaved(false);
+    if (firstRenderAt && firstRenderAt + 1000 < Date.now()) {
+      setIsSaved(false);
+    }
   }, [presentationOptions, slides, presentationTitle]);
 
   // Save changes when user leaves the page
