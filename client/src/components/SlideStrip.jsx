@@ -1,11 +1,31 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import logo from '../assets/logo.svg';
+import arrowUp from '../assets/arrow_up_icon.svg';
+import arrowDown from '../assets/arrow_down_icon.svg';
 import generateNonInteractiveElement from '../generateNonInteractiveElement';
 
 function SlideStrip(props) {
+  const [canMoveUp, setCanMoveUp] = useState(null);
+  const [canMoveDown, setCanMoveDown] = useState(null);
 
   const navigate = useNavigate();
+
+  // Set the up/down slidemove arrow buttons disabled, if first or last is selected
+  useEffect(() => {
+    if (props.currentSlide === 0) {
+      setCanMoveUp(false);
+    } else {
+      setCanMoveUp(true);
+    }
+
+    if (props.currentSlide === props.slides.length - 1) {
+      setCanMoveDown(false);
+    } else {
+      setCanMoveDown(true);
+    }
+  }, [props.currentSlide, props.slides.length]);
 
   function handleSelectSlide(selectedIndex) {
     props.setCurrentSlide(selectedIndex);
@@ -33,6 +53,15 @@ function SlideStrip(props) {
     }
   }
 
+  function handleSlideMove(direction) {
+    const slidesAfterMove = structuredClone(props.slides);
+    const temp = slidesAfterMove[props.currentSlide];
+    slidesAfterMove[props.currentSlide] = slidesAfterMove[props.currentSlide + direction];
+    slidesAfterMove[props.currentSlide + direction] = temp;
+    props.setCurrentSlide(props.currentSlide + direction);
+    props.setSlides(slidesAfterMove);
+  }
+
   return (
     <div className="SlideStrip" onKeyDown={(e) => handleSlideDelete(e)} tabIndex="0">
       <div className="SlidesLogo"><img src={logo} onClick={() => navigate('/dashboard')} /></div>
@@ -47,6 +76,8 @@ function SlideStrip(props) {
       <div></div>
       <div className='SlidesBottom'></div>
       <div className='SlidesAdd'><button onClick={handleAddNewSlide}>+</button></div>
+      <div onClick={() => handleSlideMove(-1)} className={canMoveUp ? 'SlidesArrowUp' : 'SlidesArrowUp disabled'}><img src={arrowUp}/></div>
+      <div onClick={() => handleSlideMove(+1)} className={canMoveDown ? 'SlidesArrowDown' : 'SlidesArrowDown disabled'}><img src={arrowDown}/></div>
     </div>
   )
 }
