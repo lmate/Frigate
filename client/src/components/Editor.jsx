@@ -38,13 +38,10 @@ function Editor() {
   // If a presentation is passed from Dashboard, show it, if not (the url was written manually), fetch it 
   useEffect(() => {
     async function decideIfFetchPresentation() {
-      console.log(location.state?.sentAt + 1000, Date.now());
       if (location.state?.presentation && location.state?.sentAt + 1000 > Date.now()) {
         setSlides(location.state.presentation.data.slides);
         setPresentationOptions(location.state.presentation.data.presentationOptions);
         setPresentationTitle(location.state.presentation.title);
-
-        firstRenderAt = Date.now();
 
       } else if (presentationid) {
         const response = await fetch(`/api/user/${localStorage.getItem('id')}/presentation/${presentationid}`, { method: 'GET', headers: { 'content-type': 'application/json', 'x-access-token': localStorage.getItem('token') } });
@@ -60,8 +57,9 @@ function Editor() {
         setPresentationOptions(JSON.parse(presentation.data).presentationOptions);
         setPresentationTitle(presentation.title);
 
-        firstRenderAt = Date.now();
       }
+      firstRenderAt = Date.now();
+      handleSave();
     }
     decideIfFetchPresentation();
   }, []);
@@ -119,9 +117,8 @@ function Editor() {
 
   // Save changes when user leaves the page
   useEffect(() => {
-    window.addEventListener('beforeunload', (e) => {
+    window.addEventListener('beforeunload', async (e) => {
       e.preventDefault();
-      location.state = null;
       handleSave();
     });
   }, []);
@@ -148,7 +145,7 @@ function Editor() {
 
   return (
     <>
-      <SlideStrip presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} />
+      <SlideStrip setForceReRender={setForceReRender} presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} />
       <ElementSettings presentationOptions={presentationOptions} setPresentationOptions={setPresentationOptions} slides={slides} currentSlide={currentSlide} selectedElement={selectedElement} setSlides={setSlides} />
       <MenuBar isSaved={isSaved} isInSavingProcess={isInSavingProcess} handleSave={handleSave} presentationTitle={presentationTitle} setPresentationTitle={setPresentationTitle} />
       <SlideEditorV2 forceReRender={forceReRender} presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} setSelectedElement={setSelectedElement} />

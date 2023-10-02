@@ -19,8 +19,22 @@ function SlideStrip(props) {
     document.querySelector('.SlidesBottom').scrollIntoView({ behavior: "smooth" });
   }
 
+  function handleSlideDelete(e) {
+    if (e.key === 'Delete') {
+      if (props.slides.length > 1) {
+        const slidesAfterDelete = structuredClone(props.slides);
+        slidesAfterDelete.splice(props.currentSlide, 1);
+        if (props.currentSlide === props.slides.length - 1) {
+          props.setCurrentSlide(slidesAfterDelete.length - 1);
+        }
+        props.setSlides(slidesAfterDelete);
+        props.setForceReRender(Date.now());
+      }
+    }
+  }
+
   return (
-    <div className="SlideStrip">
+    <div className="SlideStrip" onKeyDown={(e) => handleSlideDelete(e)} tabIndex="0">
       <div className="SlidesLogo"><img src={logo} onClick={() => navigate('/dashboard')} /></div>
       {props.slides.map((slide, index) => (
         <div key={index} className={props.currentSlide === index ? 'selectedSlide' : ''} onClick={() => handleSelectSlide(index)}>
