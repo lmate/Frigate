@@ -5,7 +5,7 @@ function generateNonInteractiveElement(element, index) {
         marginLeft: element.x + '%',
         marginTop: element.y + '%',
         width: element.w + '%',
-        fontSize: element.s + 'vh',
+        fontSize: element.s + 'vw',
         color: '#' + element.c,
         textAlign: element.a,
         fontStyle: element.fs,
@@ -20,7 +20,7 @@ function generateNonInteractiveElement(element, index) {
           width: element.w + '%',
           height: element.h + '%',
           backgroundColor: '#' + element.c,
-          borderRadius: element.r + 'vh'
+          borderRadius: element.r + 'vw'
         }} />
   }
 }

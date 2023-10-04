@@ -24,7 +24,7 @@ function SlideEditor(props) {
             marginLeft: element.x + '%',
             marginTop: element.y + '%',
             width: element.w + '%',
-            fontSize: element.s + 'vh',
+            fontSize: element.s + 'vw',
             color: '#' + element.c,
             textAlign: element.a,
             fontStyle: element.fs,
@@ -43,7 +43,7 @@ function SlideEditor(props) {
             width: element.w + '%',
             height: element.h + '%',
             backgroundColor: '#' + element.c,
-            borderRadius: element.r + 'vh'
+            borderRadius: element.r + 'vw'
           }} />
     }
   }

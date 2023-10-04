@@ -27,9 +27,9 @@ function ToolBar(props) {
     */
 
     if (elementType === 'title') {
-      modifiedSlides[props.currentSlide].push({t: 'text', v: 'Title', x: 20, y: 20, w: 60, s: 6, c: '000000', a: 'center', fs: '', fw: '700'});
+      modifiedSlides[props.currentSlide].push({t: 'text', v: 'Title', x: 20, y: 20, w: 60, s: 4, c: '000000', a: 'center', fs: '', fw: '700'});
     } else if (elementType === 'text') {
-      modifiedSlides[props.currentSlide].push({t: 'text', v: 'Text', x: 20, y: 20, w: 60, s: 3, c: '000000', a: 'left', fs: '', fw: '400'});
+      modifiedSlides[props.currentSlide].push({t: 'text', v: 'Text', x: 20, y: 20, w: 60, s: 1.5, c: '000000', a: 'left', fs: '', fw: '400'});
     } else if (elementType === 'rect') {
       modifiedSlides[props.currentSlide].push({t: 'rect', x: 20, y: 20, w: 60, h: 30, c: '000000', r: 0});
     }

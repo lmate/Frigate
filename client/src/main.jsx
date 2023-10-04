@@ -5,7 +5,7 @@ import Editor from './components/Editor';
 import Dashboard from './components/Dashboard';
 import Auth from './components/Auth';
 
-import './App.css';
+import './AppV2.css';
 
 const router = createBrowserRouter([
   {
