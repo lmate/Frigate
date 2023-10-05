@@ -22,6 +22,16 @@ function generateNonInteractiveElement(element, index) {
           backgroundColor: '#' + element.c,
           borderRadius: element.r + 'vw'
         }} />
+    case 'img':
+      return <img
+        key={element.t + index + 'mini'}
+        src={element.src && `data:image/webp;base64,${element.src}`}
+        style={{
+          marginLeft: element.x + '%',
+          marginTop: element.y + '%',
+          width: element.w + '%',
+          height: element.h + '%',
+        }} />
   }
 }
 

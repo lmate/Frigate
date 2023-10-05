@@ -45,6 +45,19 @@ function SlideEditor(props) {
             backgroundColor: '#' + element.c,
             borderRadius: element.r + 'vw'
           }} />
+      case 'img':
+        return <img
+          key={`${props.currentSlide}-${index}`}
+          id={`e${index}`}
+          src={element.src && `data:image/webp;base64,${element.src}`}
+          onClick={handleElementSelection}
+          tabIndex="0"
+          style={{
+            marginLeft: element.x + '%',
+            marginTop: element.y + '%',
+            width: element.w + '%',
+            height: element.h + '%',
+          }} />
     }
   }
 
@@ -103,6 +116,15 @@ function SlideEditor(props) {
       modifiedSlides[props.currentSlide][parseInt(target.getAttribute('id').split('e')[1])] = {
         ...modifiedSlides[props.currentSlide][parseInt(target.getAttribute('id').split('e')[1])],
         t: 'rect',
+        x: roundTo1Decimal(parseFloat(target.style.marginLeft)),
+        y: roundTo1Decimal(parseFloat(target.style.marginTop)),
+        w: roundTo1Decimal(parseFloat(target.style.width)),
+        h: roundTo1Decimal(parseFloat(target.style.height)),
+      };
+    } else if (target?.tagName === 'IMG') {
+      modifiedSlides[props.currentSlide][parseInt(target.getAttribute('id').split('e')[1])] = {
+        ...modifiedSlides[props.currentSlide][parseInt(target.getAttribute('id').split('e')[1])],
+        t: 'img',
         x: roundTo1Decimal(parseFloat(target.style.marginLeft)),
         y: roundTo1Decimal(parseFloat(target.style.marginTop)),
         w: roundTo1Decimal(parseFloat(target.style.width)),

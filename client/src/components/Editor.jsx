@@ -153,7 +153,7 @@ function Editor() {
       <ElementSettings presentationOptions={presentationOptions} setPresentationOptions={setPresentationOptions} slides={slides} currentSlide={currentSlide} selectedElement={selectedElement} setSlides={setSlides} />
       <MenuBar isSaved={isSaved} isInSavingProcess={isInSavingProcess} handleSave={handleSave} presentationTitle={presentationTitle} setPresentationTitle={setPresentationTitle} />
       <SlideEditorV2 forceReRender={forceReRender} presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} setSelectedElement={setSelectedElement} />
-      <ToolBar slides={slides} currentSlide={currentSlide} setSlides={setSlides} />
+      <ToolBar presentationid={presentationid} slides={slides} currentSlide={currentSlide} setSlides={setSlides} />
     </>
   )
 }

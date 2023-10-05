@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import sharp from 'sharp';
 
 import userModel from './model/User.js';
 import presentationModel from './model/Presentation.js';
@@ -11,7 +12,8 @@ import auth from './middleware.auth.js';
 
 const app = express();
 dotenv.config();
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+//app.use(express.bodyParser({limit: '50mb'}));
 
 app.post('/login', async (req, res) => {
   try {
@@ -63,8 +65,8 @@ app.post('/register', async (req, res) => {
 });
 
 app.get('/api/user/:userid', auth, async (req, res) => {
-  const user = await userModel.findById(req.params.userid).populate({path: 'presentations', options: { sort: { 'modifiedAt': -1 } } });
-  res.status(200).json({name: user.name, presentations: user.presentations});
+  const user = await userModel.findById(req.params.userid).populate({ path: 'presentations', options: { sort: { 'modifiedAt': -1 } } });
+  res.status(200).json({ name: user.name, presentations: user.presentations });
 });
 
 app.get('/api/user/:userid/presentation/:presentationid', auth, async (req, res) => {
@@ -73,8 +75,17 @@ app.get('/api/user/:userid/presentation/:presentationid', auth, async (req, res)
 });
 
 app.put('/api/user/:userid/presentation/:presentationid', auth, async (req, res) => {
-  const presentation = await presentationModel.findByIdAndUpdate(req.params.presentationid, {title: req.body.title, data: req.body.data, modifiedAt: Date.now()});
+  const presentation = await presentationModel.findByIdAndUpdate(req.params.presentationid, { title: req.body.title, data: req.body.data, modifiedAt: Date.now() });
   res.status(200).json(presentation);
+});
+
+// Converting image to Base64 webp, and resizing
+app.post('/api/user/:userid/presentation/:presentationid/image', auth, async (req, res) => {
+  const imgData = req.body.data.split(';base64,').pop();
+  const imgBuffer = Buffer.from(imgData, 'base64');
+  const imgConverted = await sharp(imgBuffer, { animated: true }).resize({ height: 500, withoutEnlargement: true }).webp().toBuffer();
+  const img = imgConverted.toString('base64');
+  res.status(200).json({src: img});
 });
 
 
