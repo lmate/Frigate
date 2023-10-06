@@ -57,6 +57,8 @@ function SlideEditor(props) {
             marginTop: element.y + '%',
             width: element.w + '%',
             height: element.h + '%',
+            borderRadius: element.r + 'vw',
+            transform: `scaleX(${element.fx ? -1 : 1}) scaleY(${element.fy ? -1 : 1})`
           }} />
     }
   }
@@ -87,7 +89,6 @@ function SlideEditor(props) {
       target.style.height = (parseFloat(target.style.height) / parseFloat(document.querySelector('.SlideEditor > div').offsetHeight)) * 100 + '%';
     }
 
-    target.style.removeProperty('transform');
     target.removeAttribute('data-x');
     target.removeAttribute('data-y');
   }
@@ -217,7 +218,6 @@ function SlideEditor(props) {
         target.style.height = event.rect.height + 'px';
         x += event.deltaRect.left;
         y += event.deltaRect.top;
-        target.style.transform = 'translate(' + x + 'px,' + y + 'px)';
         target.setAttribute('data-x', x);
         target.setAttribute('data-y', y);
         convertElementPixelToPercentage(target);

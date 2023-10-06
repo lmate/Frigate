@@ -28,6 +28,8 @@ function ToolBar(props) {
     fw = font-weight
     r = border-radius (vh)
     src = Base64 image data
+    fx = flip on x axis (bool)
+    fy = flip on y axis (bool)
     */
 
     if (elementType === 'title') {
@@ -37,7 +39,7 @@ function ToolBar(props) {
     } else if (elementType === 'rect') {
       modifiedSlides[props.currentSlide].push({ t: 'rect', x: 20, y: 20, w: 60, h: 30, c: '000000', r: 0 });
     } else if (elementType === 'img') {
-      modifiedSlides[props.currentSlide].push({ t: 'img', x: 35, y: 20, w: 30, h: 30, src: elementData});
+      modifiedSlides[props.currentSlide].push({ t: 'img', x: 35, y: 20, w: 30, h: 30, r: 0, src: elementData, fx: false, fy: false});
     }
     props.setSlides(modifiedSlides);
     slidesChangeIsInducedByElementAdding = true;

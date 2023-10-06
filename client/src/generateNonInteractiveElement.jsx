@@ -31,6 +31,8 @@ function generateNonInteractiveElement(element, index) {
           marginTop: element.y + '%',
           width: element.w + '%',
           height: element.h + '%',
+          borderRadius: element.r + 'vw',
+          transform: `scaleX(${element.fx ? -1 : 1}) scaleY(${element.fy ? -1 : 1})`
         }} />
   }
 }

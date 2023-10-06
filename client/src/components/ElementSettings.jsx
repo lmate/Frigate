@@ -10,6 +10,8 @@ import sideCenterIcon from '../assets/side_center_icon.svg';
 import sideRightIcon from '../assets/side_right_icon.svg';
 import styleNormalIcon from '../assets/style_normal_icon.svg';
 import styleItalicIcon from '../assets/style_italic_icon.svg';
+import flipHorizontalIcon from '../assets/flip_horizontal_icon.svg';
+import flipVerticalIcon from '../assets/flip_vertical_icon.svg';
 
 let labelSliderStartingValue = 0;
 
@@ -71,6 +73,14 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement, pre
       handleChangeElement({ target: { value: Math.round(((100 - selectedElementObj.w) / 2) * 10) / 10 } }, 'x');
     } else if (side === 'right') {
       handleChangeElement({ target: { value: Math.round((99 - selectedElementObj.w) * 10) / 10 } }, 'x');
+    }
+  }
+
+  function handleFlip(axis) {
+    if (axis === 'horizontal') {
+      handleChangeElement({ target: { value: !selectedElementObj.fx } }, 'fx');
+    } else if (axis === 'vertical') {
+      handleChangeElement({ target: { value: !selectedElementObj.fy } }, 'fy');
     }
   }
 
@@ -168,6 +178,40 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement, pre
                 <HexColorPicker className="colorPicker" color={colorPickerValue} onChange={setColorPickerValue} />
                 <label htmlFor="c">HEX</label>
                 <HexColorInput id="c" className="colorInput" color={colorPickerValue} onChange={setColorPickerValue} />
+              </div>
+            </>
+          )}
+          {selectedElementObj.t === 'img' && (
+            <>
+              <span>Position</span>
+              <div className="settingGroup">
+                <label htmlFor="x" onDrag={(e) => handleLabelSlider(e, 'x')} onDragStart={() => handleLabelSliderStart('x')} draggable="true">X</label>
+                <input type="number" id="x" value={selectedElementObj.x} onChange={(e) => handleChangeElement(e, 'x')} />
+                <label htmlFor="y" onDrag={(e) => handleLabelSlider(e, 'y')} onDragStart={() => handleLabelSliderStart('y')} draggable="true">Y</label>
+                <input type="number" id="y" value={selectedElementObj.y} onChange={(e) => handleChangeElement(e, 'y')} />
+                <label htmlFor="w" onDrag={(e) => handleLabelSlider(e, 'w')} onDragStart={() => handleLabelSliderStart('w')} draggable="true">W</label>
+                <input type="number" id="w" value={selectedElementObj.w} onChange={(e) => handleChangeElement(e, 'w')} />
+                <label htmlFor="h" onDrag={(e) => handleLabelSlider(e, 'h')} onDragStart={() => handleLabelSliderStart('h')} draggable="true">H</label>
+                <input type="number" id="h" value={selectedElementObj.h} onChange={(e) => handleChangeElement(e, 'h')} /><br />
+                <label style={{ cursor: 'auto', marginTop: '1vh', marginBottom: '1vh' }}>Align</label>
+                <div className="segmentedControl">
+                  <label><input type="button" value='left' onClick={() => handleAlignToSide('left')} /><img src={sideLeftIcon} /></label>
+                  <label><input type="button" value='center' onClick={() => handleAlignToSide('center')} /><img src={sideCenterIcon} /></label>
+                  <label><input type="button" value='right' onClick={() => handleAlignToSide('right')} /><img src={sideRightIcon} /></label>
+                </div>
+              </div>
+              <span>Style</span>
+              <div className="settingGroup">
+                <label htmlFor="r" onDrag={(e) => handleLabelSlider(e, 'r')} onDragStart={() => handleLabelSliderStart('r')} draggable="true">Radius</label>
+                <input type="number" min={0} id="r" value={selectedElementObj.r} onChange={(e) => handleChangeElement(e, 'r')} />
+              </div>
+              <span>Format</span>
+              <div className="settingGroup">
+              <label style={{ cursor: 'auto', marginTop: '1vh', marginBottom: '1vh' }}>Flip</label>
+                <div className="segmentedControl">
+                  <label><input type="button" value='horizontal' onClick={() => handleFlip('horizontal')} /><img src={flipHorizontalIcon} /></label>
+                  <label><input type="button" value='vertical' onClick={() => handleFlip('vertical')} /><img src={flipVerticalIcon} /></label>
+                </div>
               </div>
             </>
           )}
