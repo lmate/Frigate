@@ -71,7 +71,7 @@ function ToolBar(props) {
       <div onClick={() => handleAddElement('title')}><img src={titleIcon} /></div>
       <div onClick={() => handleAddElement('text')}><img src={textIcon} /></div>
       <div onClick={() => fileInput.current.click()}><img src={imgIcon} /></div>
-      <input type='file' ref={fileInput} style={{ display: 'none' }} onChange={handleAddImage} />
+      <input type='file' ref={fileInput} style={{ display: 'none' }} onChange={handleAddImage} accept=".jpeg, .jpg, .png, .webp, .gif, .avif, .tiff, .tif, .svg" />
       <div onClick={() => handleAddElement('rect')}><img src={rectIcon} /></div>
     </div>
   )
