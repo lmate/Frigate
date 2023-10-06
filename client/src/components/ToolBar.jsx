@@ -47,7 +47,9 @@ function ToolBar(props) {
 
   function handleAddImage(e) {
     const fileReader = new FileReader();
-    fileReader.readAsDataURL(e.target.files[0]);
+    if (e.target.files[0]) {
+      fileReader.readAsDataURL(e.target.files[0]);
+    }
 
     fileReader.onload = async () => {
       const response = await fetch(`/api/user/${localStorage.getItem('id')}/presentation/${props.presentationid}/image`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-access-token': localStorage.getItem('token') }, body: JSON.stringify({data: fileReader.result}) });
