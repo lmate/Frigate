@@ -41,8 +41,14 @@ function ToolBar(props) {
     } else if (elementType === 'img') {
       modifiedSlides[props.currentSlide].push({ t: 'img', x: 35, y: 20, w: 30, h: 30, r: 0, src: elementData, fx: false, fy: false});
     }
-    props.setSlides(modifiedSlides);
-    slidesChangeIsInducedByElementAdding = true;
+
+    const totalSizeInMB = new Blob([JSON.stringify(modifiedSlides)]).size / 1024 / 1024;
+    if (totalSizeInMB < 15) {
+      props.setSlides(modifiedSlides);
+      slidesChangeIsInducedByElementAdding = true;
+    } else {
+      alert('You have reached the max size of a presentation');
+    }
   }
 
   function handleAddImage(e) {
