@@ -14,6 +14,7 @@ let firstRenderAt;
 let autoSaveTimer;
 
 function Editor() {
+  const [elementOnClipboard, setElementOnClipboard] = useState(null);
   const [presentationOptions, setPresentationOptions] = useState({ backgroundColor: '#ffffff' });
   const [slides, setSlides] = useState([[]]);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -70,7 +71,6 @@ function Editor() {
   document.addEventListener('keydown', handleKeyboardShortcuts, { signal: undoKeyboardEventListenerAbortController.signal });
 
   function handleKeyboardShortcuts(e) {
-    // Undo
     if (e.ctrlKey && e.key === 'z') {
       e.preventDefault();
       if (changeHistory.length > 1) {
@@ -83,10 +83,22 @@ function Editor() {
         setSelectedElement(null);
         setForceReRender(Date.now());
       }
-      // Save
+
     } else if (e.ctrlKey && e.key === 's') {
       e.preventDefault();
       handleSave();
+
+    } else if (e.ctrlKey && e.key === 'c') {
+      e.preventDefault();
+      setElementOnClipboard(structuredClone(slides[currentSlide][parseInt(selectedElement.getAttribute('id').split('e')[1])]));
+
+    } else if (e.ctrlKey && e.key === 'v') {
+      e.preventDefault();
+      if (elementOnClipboard) {
+        const slidesAfterInsert = structuredClone(slides);
+        slidesAfterInsert[currentSlide].push({ ...elementOnClipboard, x: (100 - elementOnClipboard.w) / 2, y: elementOnClipboard.h ? ((80 - elementOnClipboard.h) / 2) : 20 });
+        setSlides(slidesAfterInsert);
+      }
     }
   }
 
@@ -152,7 +164,7 @@ function Editor() {
       <SlideStrip setForceReRender={setForceReRender} presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} />
       <ElementSettings presentationOptions={presentationOptions} setPresentationOptions={setPresentationOptions} slides={slides} currentSlide={currentSlide} selectedElement={selectedElement} setSlides={setSlides} />
       <MenuBar isSaved={isSaved} isInSavingProcess={isInSavingProcess} handleSave={handleSave} presentationTitle={presentationTitle} setPresentationTitle={setPresentationTitle} />
-      <SlideEditorV2 forceReRender={forceReRender} presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} setSelectedElement={setSelectedElement} />
+      <SlideEditorV2 elementOnClipboard={elementOnClipboard} setElementOnClipboard={setElementOnClipboard} forceReRender={forceReRender} presentationOptions={presentationOptions} slides={slides} currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} setSlides={setSlides} setSelectedElement={setSelectedElement} />
       <ToolBar presentationid={presentationid} slides={slides} currentSlide={currentSlide} setSlides={setSlides} />
     </>
   )
