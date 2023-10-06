@@ -17,16 +17,21 @@ app.use(express.json({ limit: '50mb' }));
 
 log4js.configure({
   appenders: {
-    STARTUP: { type: "file", filename: "log.log" },
-    REGISTER: { type: "file", filename: "log.log" },
-    LOGIN: { type: "file", filename: "log.log" },
-    SAVE_PRESENTATION: { type: "file", filename: "log.log" },
-    LOAD_PRESENTATION: { type: "file", filename: "log.log" },
-    LOAD_USER: { type: "file", filename: "log.log" },
-    CONVERT_IMAGE: { type: "file", filename: "log.log" }
+    INFO: { type: 'file', filename: 'server.log' },
+    INFO_CONSOLE: { type: 'console' },
+    ERROR: { type: 'file', filename: 'server.log' },
+    ERROR_CONSOLE: { type: 'console' },
   },
   categories: {
-    default: { appenders: ["REGISTER", "LOGIN", "SAVE_PRESENTATION", "LOAD_PRESENTATION", "LOAD_USER", "CONVERT_IMAGE", "STARTUP"], level: "info" }
+    STARTUP: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
+    REGISTER: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
+    LOGIN: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
+    SAVE_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
+    LOAD_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
+    LOAD_USER: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
+    CONVERT_IMAGE: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
+    ERROR: { appenders: ['ERROR', 'ERROR_CONSOLE'], level: 'error' },
+    default: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' }
   },
 });
 
@@ -37,6 +42,7 @@ const SavePresentationLogger = log4js.getLogger('SAVE_PRESENTATION');
 const LoadPresentationLogger = log4js.getLogger('LOAD_PRESENTATION');
 const LoadUserLogger = log4js.getLogger('LOAD_USER');
 const ConvertImageLogger = log4js.getLogger('CONVERT_IMAGE');
+const ErrorLogger = log4js.getLogger('ERROR');
 
 
 app.post('/login', async (req, res) => {
@@ -59,7 +65,7 @@ app.post('/login', async (req, res) => {
     }
 
   } catch (err) {
-    console.log(err);
+    ErrorLogger.error(`[Login] ${err}`);
   }
 });
 
@@ -85,44 +91,65 @@ app.post('/register', async (req, res) => {
 
     RegisterLogger.info(`${user._id} registered`);
     return res.status(200).json({ id: user._id, token });
+
   } catch (err) {
-    console.log(err);
+    ErrorLogger.error(`[Register] ${err}`);
   }
 });
 
 app.get('/api/user/:userid', auth, async (req, res) => {
-  const user = await userModel.findById(req.params.userid).populate({ path: 'presentations', options: { sort: { 'modifiedAt': -1 } } });
+  try {
+    const user = await userModel.findById(req.params.userid).populate({ path: 'presentations', options: { sort: { 'modifiedAt': -1 } } });
 
-  LoadUserLogger.info(`${req.params.userid}'s data was loaded`);
-  res.status(200).json({ name: user.name, presentations: user.presentations });
+    LoadUserLogger.info(`${req.params.userid} loaded their data`);
+    res.status(200).json({ name: user.name, presentations: user.presentations });
+  } catch (err) {
+    ErrorLogger.error(`[LoadUser] ${err}`);
+  }
 });
 
 app.get('/api/user/:userid/presentation/:presentationid', auth, async (req, res) => {
-  const presentation = await presentationModel.findById(req.params.presentationid);
-  LoadPresentationLogger.info(`${req.params.userid} loaded presentation ${req.params.presentationid}`);
-  res.status(200).json(presentation);
+  try {
+    const presentation = await presentationModel.findById(req.params.presentationid);
+    LoadPresentationLogger.info(`${req.params.userid} loaded presentation ${req.params.presentationid}`);
+    res.status(200).json(presentation);
+  } catch (err) {
+    ErrorLogger.error(`[LoadPresentation] ${err}`);
+  }
 });
 
 app.put('/api/user/:userid/presentation/:presentationid', auth, async (req, res) => {
-  const presentation = await presentationModel.findByIdAndUpdate(req.params.presentationid, { title: req.body.title, data: req.body.data, modifiedAt: Date.now() });
-  SavePresentationLogger.info(`${req.params.userid} saved presentation ${req.params.presentationid}`);
-  res.status(200).json(presentation);
+  try {
+    const presentation = await presentationModel.findByIdAndUpdate(req.params.presentationid, { title: req.body.title, data: req.body.data, modifiedAt: Date.now() });
+    SavePresentationLogger.info(`${req.params.userid} saved presentation ${req.params.presentationid}`);
+    res.status(200).json(presentation);
+  } catch (err) {
+    ErrorLogger.error(`[SavePresentation] ${err}`);
+  }
 });
 
 // Converting image to Base64 webp, and resizing
 app.post('/api/user/:userid/presentation/:presentationid/image', auth, async (req, res) => {
-  const imgData = req.body.data.split(';base64,').pop();
-  const imgBuffer = Buffer.from(imgData, 'base64');
-  const imgConverted = await sharp(imgBuffer, { animated: true }).resize({ height: 500, withoutEnlargement: true }).webp().toBuffer();
-  const img = imgConverted.toString('base64');
-  ConvertImageLogger.info(`${req.params.userid} converted an image in presentation ${req.params.presentationid}`);
-  res.status(200).json({src: img});
+  try {
+    const imgData = req.body.data.split(';base64,').pop();
+    const imgBuffer = Buffer.from(imgData, 'base64');
+    const imgConverted = await sharp(imgBuffer, { animated: true }).resize({ height: 500, withoutEnlargement: true }).webp().toBuffer();
+    const img = imgConverted.toString('base64');
+    ConvertImageLogger.info(`${req.params.userid} converted an image in presentation ${req.params.presentationid}`);
+    res.status(200).json({ src: img });
+  } catch (err) {
+    ErrorLogger.error(`[ConvertImage] ${err}`);
+  }
 });
 
 
 async function startup() {
-  await mongoose.connect(process.env.DB_URL);
-  app.listen(3000, () => console.log('Started on http://localhost:3000'));
-  StartupLogger.info(`Server started`);
+  try {
+    await mongoose.connect(process.env.DB_URL);
+    app.listen(3000);
+    StartupLogger.info(`Server started`);
+  } catch (err) {
+    ErrorLogger.error(`[Startup] ${err}`);
+  }
 }
 startup();

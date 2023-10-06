@@ -1,0 +1,6 @@
+[2023-10-06T18:08:02.360] [INFO] STARTUP - Server started
+[2023-10-06T18:08:36.603] [INFO] STARTUP - Server started
+[2023-10-06T18:09:33.350] [INFO] LOAD_PRESENTATION - 6512eb52fd84a5a372e33c42 loaded presentation 6512f354198b0a18dc74df62
+[2023-10-06T18:09:41.510] [ERROR] ERROR - [ConvertImage] Error: Input buffer contains unsupported image format
+[2023-10-06T18:10:00.487] [INFO] LOAD_PRESENTATION - 6512eb52fd84a5a372e33c42 loaded presentation 6512f354198b0a18dc74df62
+[2023-10-06T18:13:00.053] [INFO] LOAD_PRESENTATION - 6512eb52fd84a5a372e33c42 loaded presentation 6512f354198b0a18dc74df62
