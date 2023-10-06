@@ -28,6 +28,7 @@ log4js.configure({
     LOGIN: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
     SAVE_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
     LOAD_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
+    CREATE_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
     LOAD_USER: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
     CONVERT_IMAGE: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
     ERROR: { appenders: ['ERROR', 'ERROR_CONSOLE'], level: 'error' },
@@ -40,6 +41,7 @@ const LoginLogger = log4js.getLogger('LOGIN');
 const RegisterLogger = log4js.getLogger('REGISTER');
 const SavePresentationLogger = log4js.getLogger('SAVE_PRESENTATION');
 const LoadPresentationLogger = log4js.getLogger('LOAD_PRESENTATION');
+const CreatePresentationLogger = log4js.getLogger('CREATE_PRESENTATION');
 const LoadUserLogger = log4js.getLogger('LOAD_USER');
 const ConvertImageLogger = log4js.getLogger('CONVERT_IMAGE');
 const ErrorLogger = log4js.getLogger('ERROR');
@@ -97,6 +99,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
+// Get user data
 app.get('/api/user/:userid', auth, async (req, res) => {
   try {
     const user = await userModel.findById(req.params.userid).populate({ path: 'presentations', options: { sort: { 'modifiedAt': -1 } } });
@@ -108,6 +111,7 @@ app.get('/api/user/:userid', auth, async (req, res) => {
   }
 });
 
+// Get presentation
 app.get('/api/user/:userid/presentation/:presentationid', auth, async (req, res) => {
   try {
     const presentation = await presentationModel.findById(req.params.presentationid);
@@ -118,6 +122,22 @@ app.get('/api/user/:userid/presentation/:presentationid', auth, async (req, res)
   }
 });
 
+// Create presentation
+app.post('/api/user/:userid/presentation', auth, async (req, res) => {
+  try {
+    const presentation = await presentationModel.create({
+      title: 'New Presentation',
+      data: '{"slides":[[]],"presentationOptions":{"backgroundColor":"#ffffff"}}'
+    });
+    await userModel.findByIdAndUpdate(req.params.userid, { $push: { presentations: presentation._id } });
+    CreatePresentationLogger.info(`${req.params.userid} created presentation ${presentation._id}`);
+    res.status(200).json(presentation);
+  } catch (err) {
+    ErrorLogger.error(`[CreatePresentation] ${err}`);
+  }
+});
+
+// Save presentation
 app.put('/api/user/:userid/presentation/:presentationid', auth, async (req, res) => {
   try {
     const presentation = await presentationModel.findByIdAndUpdate(req.params.presentationid, { title: req.body.title, data: req.body.data, modifiedAt: Date.now() });

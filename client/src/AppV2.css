@@ -598,3 +598,24 @@ body {
   width: 48.5vw;
   height: 5vw;
 }
+
+.Header>button {
+  width: 3vw;
+  height: 3vw;
+  margin-top: 1vw;
+  margin-right: 1vw;
+  border-radius: 5vw;
+  border: 0px solid black;
+  background-color: var(--primary);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.3);
+  cursor: pointer;
+  color: var(--bg);
+  font-size: 2vw;
+  outline: none;
+  float: right;
+}
+
+.Header>button:active {
+  transform: scale(0.98);
+  box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
