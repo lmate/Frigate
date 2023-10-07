@@ -507,8 +507,8 @@ body {
 .PresentationPreview>div:nth-of-type(2)>div>img {
   width: 1.25vw;
   height: 1.25vw;
-  margin-left: .6vw;
-  margin-top: .6vw;
+  margin-left: .65vw;
+  margin-top: .65vw;
   filter: invert(51%) sepia(16%) saturate(190%) hue-rotate(172deg) brightness(98%) contrast(91%);
 }
 
@@ -533,8 +533,8 @@ body {
   box-shadow: 0 0 5px rgb(0 0 0 / 0.1);
 }
 
-.PresentationPreview>div:nth-of-type(2)>div:nth-of-type(3) {
-  margin-left: calc(100% - 14vw);
+.PresentationPreview>div:nth-of-type(2)>div:nth-of-type(4) {
+  margin-left: calc(100% - 17.5vw);
 }
 
 .PresentationList {
@@ -617,5 +617,58 @@ body {
 
 .Header>button:active {
   transform: scale(0.98);
+  box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  background-color: rgb(70 70 70 / .4);
+}
+
+.modal>div {
+  width: 30vw;
+  margin-left: 35vw;
+  margin-top: calc((100vh - 20vw) / 2);
+  border-radius: 1vw;
+  background-color: var(--elementbg);
+  box-shadow: 0 0px 20px rgb(0 0 0 / 0.3);
+}
+
+.modal>div>p {
+  margin: 1.2vw;
+  padding-top: 1.2vw;
+  font-size: .9vw;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.modal>div>button {
+  margin-left: .8vw;
+  margin-top: .5vw;
+  margin-bottom: 1.2vw;
+  background-color: var(--bg);
+  border: 0px solid black;
+  cursor: pointer;
+  padding: .4vw;
+  width: 4vw;
+  font-weight: 600;
+  color: var(--primary);
+  border-radius: .8vw;
+  box-shadow: 0 0px 10px rgb(0 0 0 / 0.3);
+}
+
+.modal>div>button:first-of-type {
+  background-color: var(--primary);
+  color: var(--elementbg);
+  margin-left: 20vw;
+}
+
+.modal>div>button:active {
+  transform: scale(0.96);
   box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
 }

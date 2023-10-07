@@ -32,7 +32,7 @@ function Dashboard() {
     <>
       {user && (
         <>
-          <PresentationPreview presentations={user.presentations} selectedPresentationIndex={selectedPresentationIndex} />
+          <PresentationPreview user={user} setUser={setUser} presentations={user.presentations} selectedPresentationIndex={selectedPresentationIndex} setSelectedPresentationIndex={setSelectedPresentationIndex}/>
           <Header />
           <PresentationList presentations={user.presentations} setSelectedPresentationIndex={setSelectedPresentationIndex}/>
         </>

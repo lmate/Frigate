@@ -29,6 +29,7 @@ log4js.configure({
     SAVE_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
     LOAD_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
     CREATE_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
+    DELETE_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
     LOAD_USER: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
     CONVERT_IMAGE: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
     ERROR: { appenders: ['ERROR', 'ERROR_CONSOLE'], level: 'error' },
@@ -42,6 +43,7 @@ const RegisterLogger = log4js.getLogger('REGISTER');
 const SavePresentationLogger = log4js.getLogger('SAVE_PRESENTATION');
 const LoadPresentationLogger = log4js.getLogger('LOAD_PRESENTATION');
 const CreatePresentationLogger = log4js.getLogger('CREATE_PRESENTATION');
+const DeletePresentationLogger = log4js.getLogger('DELETE_PRESENTATION');
 const LoadUserLogger = log4js.getLogger('LOAD_USER');
 const ConvertImageLogger = log4js.getLogger('CONVERT_IMAGE');
 const ErrorLogger = log4js.getLogger('ERROR');
@@ -134,6 +136,18 @@ app.post('/api/user/:userid/presentation', auth, async (req, res) => {
     res.status(200).json(presentation);
   } catch (err) {
     ErrorLogger.error(`[CreatePresentation] ${err}`);
+  }
+});
+
+// Delete presentation
+app.delete('/api/user/:userid/presentation/:presentationid', auth, async (req, res) => {
+  try {
+    await presentationModel.findByIdAndDelete(req.params.presentationid);
+    await userModel.findByIdAndUpdate(req.params.userid, { $pull: { presentations: req.params.presentationid } });
+    DeletePresentationLogger.info(`${req.params.userid} deleted presentation ${req.params.presentationid}`);
+    res.status(200).json({});
+  } catch (err) {
+    ErrorLogger.error(`[DeletePresentation] ${err}`);
   }
 });
 
