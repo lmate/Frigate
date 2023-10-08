@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Editor from './components/Editor';
 import Dashboard from './components/Dashboard';
 import Auth from './components/Auth';
+import Present from './components/Present';
 
 import './AppV2.css';
 
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: "/edit/:presentationid",
     element: <Editor />
+  },
+  {
+    path: "/present/:presentationid",
+    element: <Present />
   },
   {
     path: "/auth",

@@ -281,7 +281,8 @@ body {
 .SlideEditor>div>textarea,
 .SlideStrip>div>div>p,
 .PresentationList>div>div>p,
-.PresentationPreview>div:nth-of-type(1)>p {
+.PresentationPreview>div:nth-of-type(1)>p,
+.Present>div>p {
   position: absolute;
   resize: none;
   border: 0px solid black;
@@ -297,7 +298,8 @@ body {
 .SlideEditor>div>div,
 .SlideStrip>div>div>div,
 .PresentationList>div>div>div,
-.PresentationPreview>div:nth-of-type(1)>div {
+.PresentationPreview>div:nth-of-type(1)>div,
+.Present>div>div {
   position: absolute;
   resize: none;
   border: 0px solid black;
@@ -310,7 +312,8 @@ body {
 .SlideEditor>div>img,
 .SlideStrip>div>div>img,
 .PresentationList>div>div>img,
-.PresentationPreview>div:nth-of-type(1)>img {
+.PresentationPreview>div:nth-of-type(1)>img,
+.Present>div>img {
   position: absolute;
   resize: none;
   border: 0px solid black;
@@ -671,4 +674,30 @@ body {
 .modal>div>button:active {
   transform: scale(0.96);
   box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+.Present>div {
+  height: 37vw;
+  width: calc(37vw * 1.78);
+  transform: scale(1.517);
+  transform-origin: top left;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.Present>span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 99.9vw;
+  height: 100vh;
+  backdrop-filter: blur(15px);
+  background-color: rgb(70 70 70 / .1);
+  color: var(--primary);
+  font-size: 2vw;
+  font-weight: 600;
+  text-align: center;
 }

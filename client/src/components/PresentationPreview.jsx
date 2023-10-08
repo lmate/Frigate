@@ -34,6 +34,10 @@ function PresentationPreview({ presentations, selectedPresentationIndex, setSele
     navigate(`/edit/${selectedPresentation._id}`, {state: {presentation: selectedPresentation, sentAt: Date.now()}});
   }
 
+  function handleStartPresent() {
+    navigate(`/present/${selectedPresentation._id}`, {state: {presentation: selectedPresentation, sentAt: Date.now()}});
+  }
+
   async function handleDelete() {
     await fetch(`/api/user/${localStorage.getItem('id')}/presentation/${presentations[selectedPresentationIndex]._id}`, { method: 'DELETE', headers: { 'content-type': 'application/json', 'x-access-token': localStorage.getItem('token') }, body: JSON.stringify({}) });
     
@@ -54,7 +58,7 @@ function PresentationPreview({ presentations, selectedPresentationIndex, setSele
           </div>
           <div>
             <div onClick={handleStartEdit}><img src={editIcon} /></div>
-            <div><img src={playIcon} /></div>
+            <div onClick={handleStartPresent}><img src={playIcon} /></div>
             <div onClick={() => setIsDeleteModal(true)} className={presentations.length === 1 ? 'disabled' : ''}><img src={trashIcon} /></div>
             <div onClick={() => handleChangeViewingSlide('prev')} className={viewingSlideIndex === 0 ? 'disabled' : ''}><img src={arrowLeftIcon} /></div>
             <div onClick={() => handleChangeViewingSlide('next')} className={viewingSlideIndex === selectedPresentation.data.slides.length - 1 ? 'disabled' : ''}><img src={arrowRightIcon} /></div>
