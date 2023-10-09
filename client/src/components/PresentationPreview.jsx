@@ -31,11 +31,11 @@ function PresentationPreview({ presentations, selectedPresentationIndex, setSele
   }
 
   function handleStartEdit() {
-    navigate(`/edit/${selectedPresentation._id}`, {state: {presentation: selectedPresentation, sentAt: Date.now()}});
+    navigate(`/present/edit/${selectedPresentation._id}`, {state: {presentation: selectedPresentation, sentAt: Date.now()}});
   }
 
   function handleStartPresent() {
-    navigate(`/present/${selectedPresentation._id}`, {state: {presentation: selectedPresentation, sentAt: Date.now()}});
+    navigate(`/present/present/${selectedPresentation._id}`, {state: {presentation: selectedPresentation, sentAt: Date.now()}});
   }
 
   async function handleDelete() {

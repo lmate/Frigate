@@ -10,15 +10,15 @@ import './AppV2.css';
 
 const router = createBrowserRouter([
   {
-    path: "/dashboard",
+    path: "/present/dashboard",
     element: <Dashboard />,
   },
   {
-    path: "/edit/:presentationid",
+    path: "/present/edit/:presentationid",
     element: <Editor />
   },
   {
-    path: "/present/:presentationid",
+    path: "/present/present/:presentationid",
     element: <Present />
   },
   {

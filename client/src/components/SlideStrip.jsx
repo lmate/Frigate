@@ -64,7 +64,7 @@ function SlideStrip(props) {
 
   return (
     <div className="SlideStrip" onKeyDown={(e) => handleSlideDelete(e)} tabIndex="0">
-      <div className="SlidesLogo"><img src={logo} onClick={() => navigate('/dashboard')} /></div>
+      <div className="SlidesLogo"><img src={logo} onClick={() => navigate('/present/dashboard')} /></div>
       {props.slides.map((slide, index) => (
         <div key={index} className={props.currentSlide === index ? 'selectedSlide' : ''} onClick={() => handleSelectSlide(index)}>
           <p>{index + 1}</p>

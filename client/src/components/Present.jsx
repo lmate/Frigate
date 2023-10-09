@@ -55,7 +55,7 @@ function Present() {
   useEffect(() => {
     document.addEventListener('fullscreenchange', () => {
       if (!window.screenTop && !window.screenY) {
-        navigate('/dashboard');
+        navigate('/present/dashboard');
       }
     });
   }, []);
