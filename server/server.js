@@ -5,6 +5,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import sharp from 'sharp';
 import log4js from 'log4js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import userModel from './model/User.js';
 import presentationModel from './model/Presentation.js';
@@ -14,6 +16,7 @@ import auth from './middleware.auth.js';
 const app = express();
 dotenv.config();
 app.use(express.json({ limit: '50mb' }));
+const MAINFOLDER = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 
 log4js.configure({
   appenders: {
@@ -47,7 +50,6 @@ const DeletePresentationLogger = log4js.getLogger('DELETE_PRESENTATION');
 const LoadUserLogger = log4js.getLogger('LOAD_USER');
 const ConvertImageLogger = log4js.getLogger('CONVERT_IMAGE');
 const ErrorLogger = log4js.getLogger('ERROR');
-
 
 app.post('/login', async (req, res) => {
   try {
@@ -176,11 +178,18 @@ app.post('/api/user/:userid/presentation/:presentationid/image', auth, async (re
   }
 });
 
+if (process.env.PRODUCTION === 'true') {
+  app.use(express.static(path.join(MAINFOLDER, 'Present')));
+  app.get('*', (req, res) =>{
+    res.sendFile('index.html', {root: path.join(MAINFOLDER, 'Present')});
+  });
+}
+
 
 async function startup() {
   try {
     await mongoose.connect(process.env.DB_URL);
-    app.listen(3000);
+    app.listen(process.env.PRODUCTION === 'true' ? 80 : 3000);
     StartupLogger.info(`Server started`);
   } catch (err) {
     ErrorLogger.error(`[Startup] ${err}`);
