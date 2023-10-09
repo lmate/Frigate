@@ -62,7 +62,6 @@ function PresentationPreview({ presentations, selectedPresentationIndex, setSele
             <div onClick={() => setIsDeleteModal(true)} className={presentations.length === 1 ? 'disabled' : ''}><img src={trashIcon} /></div>
             <div onClick={() => handleChangeViewingSlide('prev')} className={viewingSlideIndex === 0 ? 'disabled' : ''}><img src={arrowLeftIcon} /></div>
             <div onClick={() => handleChangeViewingSlide('next')} className={viewingSlideIndex === selectedPresentation.data.slides.length - 1 ? 'disabled' : ''}><img src={arrowRightIcon} /></div>
-            <span>{presentations[selectedPresentationIndex].title}</span>
           </div>
         </div>
       )}

@@ -504,7 +504,6 @@ body {
   margin-top: calc(37vw * .704 + 2vw);
   margin-left: 1vw;
   width: calc(100% - 2vw);
-  border: 1px solid red;
 }
 
 .PresentationPreview>div:nth-of-type(2)>div>img {
