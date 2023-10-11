@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 
 import Editor from './components/Editor';
 import Dashboard from './components/Dashboard';
@@ -24,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     element: <Auth />
+  },
+  {
+    path: "*",
+    element: <Navigate to="/present/dashboard" />
   }
 ]);
 
