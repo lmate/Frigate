@@ -54,7 +54,7 @@ const ErrorLogger = log4js.getLogger('ERROR');
 app.post('/login', async (req, res) => {
   try {
     if (!(req.body.email && req.body.password)) {
-      return res.status(400).json({ res: 'All fields are required' });
+      return res.status(200).json({ res: 'All fields are required' });
     }
 
     const user = await userModel.findOne({ email: req.body.email.toLowerCase() });
@@ -78,12 +78,12 @@ app.post('/login', async (req, res) => {
 app.post('/register', async (req, res) => {
   try {
     if (!(req.body.email && req.body.name && req.body.password)) {
-      return res.status(400).json({ res: 'All fields are required' });
+      return res.status(200).json({ res: 'All fields are required' });
     }
 
     const oldUser = await userModel.findOne({ email: req.body.email.toLowerCase() });
     if (oldUser) {
-      return res.status(400).json({ res: 'User already exists' });
+      return res.status(200).json({ res: 'User already exists' });
     }
 
     const encryptedPassword = await bcrypt.hash(req.body.password, 10);

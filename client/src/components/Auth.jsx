@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import Logo from '../assets/logo.svg';
+
 function Auth() {
   const [loginOrRegister, setLoginOrRegister] = useState('login');
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ function Auth() {
     e.preventDefault();
     const loginData = Object.fromEntries(new FormData(e.target));
 
-    const response = await fetch('/login', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(loginData)});
+    const response = await fetch('/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(loginData) });
     const data = await response.json();
     if (data.id) {
       localStorage.setItem('id', data.id);
@@ -31,7 +33,7 @@ function Auth() {
     e.preventDefault();
     const registerData = Object.fromEntries(new FormData(e.target));
 
-    const response = await fetch('/register', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(registerData)});
+    const response = await fetch('/register', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(registerData) });
     const data = await response.json();
     if (data.id) {
       localStorage.setItem('id', data.id);
@@ -43,28 +45,31 @@ function Auth() {
   }
 
   return (
-    <div className="auth">
-      {loginOrRegister === 'login' && (
-        <>
-          <form onSubmit={handleLogin}>
-            <input type="email" name="email" placeholder="email" required/>
-            <input type="password" name="password" placeholder="password" required/>
-            <button type="submit">Login</button>
-          </form><br />
-          <button type="button" onClick={() => setLoginOrRegister('register')}>Register</button>
-        </>
-      )}
-      {loginOrRegister === 'register' && (
-        <>
-          <form onSubmit={handleRegister}>
-            <input type="email" name="email" placeholder="email" required/>
-            <input type="text" name="name" placeholder="first name" required/>
-            <input type="password" name="password" placeholder="password" required/>
-            <button type="submit">Register</button>
-          </form><br />
-          <button type="button" onClick={() => setLoginOrRegister('login')}>Login</button>
-        </>
-      )}
+    <div className="Auth">
+      <div>
+        <img src={Logo} />
+        {loginOrRegister === 'login' && (
+          <>
+            <form onSubmit={handleLogin}>
+              <input type="email" name="email" placeholder="Email" required />
+              <input type="password" name="password" placeholder="Password" required />
+              <button type="submit">Login</button>
+            </form><br />
+            <button type="button" onClick={() => setLoginOrRegister('register')}>Register</button>
+          </>
+        )}
+        {loginOrRegister === 'register' && (
+          <>
+            <form onSubmit={handleRegister}>
+              <input type="email" name="email" placeholder="Email" required />
+              <input type="text" name="name" placeholder="First name" required />
+              <input type="password" name="password" placeholder="Password" required />
+              <button type="submit">Register</button>
+            </form><br />
+            <button type="button" onClick={() => setLoginOrRegister('login')}>Login</button>
+          </>
+        )}
+      </div>
     </div>
   )
 }
