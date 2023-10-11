@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function Header() {
+function Header({ user }) {
 
   const navigate = useNavigate();
 
@@ -10,9 +10,17 @@ function Header() {
     navigate(`/present/edit/${presentation._id}`, {state: {presentation: {...presentation, data: JSON.parse(presentation.data)}, sentAt: Date.now()}});
   }
 
+  function handleLogout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('id');
+    navigate('/auth');
+  }
+
   return (
     <div className="Header">
       <button onClick={handleCreatePresentation}>+</button>
+      <span>{user.name}</span>
+      <span onClick={handleLogout}><u>Log out</u></span>
     </div>
   )
 }
