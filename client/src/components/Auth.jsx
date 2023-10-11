@@ -21,7 +21,7 @@ function Auth() {
     if (data.id) {
       localStorage.setItem('id', data.id);
       localStorage.setItem('token', data.token);
-      navigate('/dashboard');
+      navigate('/present/dashboard');
     } else {
       console.log(data.res);
     }
@@ -36,7 +36,7 @@ function Auth() {
     if (data.id) {
       localStorage.setItem('id', data.id);
       localStorage.setItem('token', data.token);
-      navigate('/dashboard');
+      navigate('/present/dashboard');
     } else {
       console.log(data.res);
     }

@@ -87,10 +87,15 @@ app.post('/register', async (req, res) => {
     }
 
     const encryptedPassword = await bcrypt.hash(req.body.password, 10);
+    const presentation = await presentationModel.create({
+      title: 'New Presentation',
+      data: '{"slides":[[]],"presentationOptions":{"backgroundColor":"#ffffff"}}'
+    });
     const user = await userModel.create({
       email: req.body.email.toLowerCase(),
       name: req.body.name,
-      password: encryptedPassword
+      password: encryptedPassword,
+      presentations: [presentation._id]
     });
 
     const token = jwt.sign({ user_id: user._id, email: user.email }, process.env.TOKEN_KEY, { expiresIn: "7d" });
