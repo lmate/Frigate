@@ -12,6 +12,8 @@ import styleNormalIcon from '../assets/style_normal_icon.svg';
 import styleItalicIcon from '../assets/style_italic_icon.svg';
 import flipHorizontalIcon from '../assets/flip_horizontal_icon.svg';
 import flipVerticalIcon from '../assets/flip_vertical_icon.svg';
+import arrowUpIcon from '../assets/arrow_up_icon.svg';
+import arrowDownIcon from '../assets/arrow_down_icon.svg';
 
 let labelSliderStartingValue = 0;
 
@@ -84,6 +86,18 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement, pre
     }
   }
 
+  function handleControlZIndex(direction) {
+    if (direction === 'up') {
+      if (slides[currentSlide].length > parseInt(selectedElementObj.z)) {
+        handleChangeElement({ target: { value: parseInt(selectedElementObj.z) + 1 } }, 'z');
+      }
+    } else if (direction === 'down') {
+      if (parseInt(selectedElementObj.z) > 0) {
+        handleChangeElement({ target: { value: parseInt(selectedElementObj.z) - 1 } }, 'z');
+      }
+    }
+  }
+
   return (
     <div className="ElementSettings">
       {!selectedElementObj && (
@@ -113,6 +127,11 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement, pre
                   <label><input type="button" value='left' onClick={() => handleAlignToSide('left')} /><img src={sideLeftIcon} /></label>
                   <label><input type="button" value='center' onClick={() => handleAlignToSide('center')} /><img src={sideCenterIcon} /></label>
                   <label><input type="button" value='right' onClick={() => handleAlignToSide('right')} /><img src={sideRightIcon} /></label>
+                </div><br/>
+                <label style={{ cursor: 'auto', marginTop: '1vh', marginBottom: '1vh' }}>Depth</label>
+                <div className="segmentedControl">
+                  <label><input type="button" value='up' onClick={() => handleControlZIndex('up')} /><img src={arrowUpIcon} /></label>
+                  <label><input type="button" value='down' onClick={() => handleControlZIndex('down')} /><img src={arrowDownIcon} /></label>
                 </div>
               </div>
               <span>Font</span>
@@ -166,6 +185,11 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement, pre
                   <label><input type="button" value='left' onClick={() => handleAlignToSide('left')} /><img src={sideLeftIcon} /></label>
                   <label><input type="button" value='center' onClick={() => handleAlignToSide('center')} /><img src={sideCenterIcon} /></label>
                   <label><input type="button" value='right' onClick={() => handleAlignToSide('right')} /><img src={sideRightIcon} /></label>
+                </div><br/>
+                <label style={{ cursor: 'auto', marginTop: '1vh', marginBottom: '1vh' }}>Depth</label>
+                <div className="segmentedControl">
+                  <label><input type="button" value='up' onClick={() => handleControlZIndex('up')} /><img src={arrowUpIcon} /></label>
+                  <label><input type="button" value='down' onClick={() => handleControlZIndex('down')} /><img src={arrowDownIcon} /></label>
                 </div>
               </div>
               <span>Style</span>
@@ -198,6 +222,11 @@ function ElementSettings({ slides, setSlides, currentSlide, selectedElement, pre
                   <label><input type="button" value='left' onClick={() => handleAlignToSide('left')} /><img src={sideLeftIcon} /></label>
                   <label><input type="button" value='center' onClick={() => handleAlignToSide('center')} /><img src={sideCenterIcon} /></label>
                   <label><input type="button" value='right' onClick={() => handleAlignToSide('right')} /><img src={sideRightIcon} /></label>
+                </div><br/>
+                <label style={{ cursor: 'auto', marginTop: '1vh', marginBottom: '1vh' }}>Depth</label>
+                <div className="segmentedControl">
+                  <label><input type="button" value='up' onClick={() => handleControlZIndex('up')} /><img src={arrowUpIcon} /></label>
+                  <label><input type="button" value='down' onClick={() => handleControlZIndex('down')} /><img src={arrowDownIcon} /></label>
                 </div>
               </div>
               <span>Style</span>

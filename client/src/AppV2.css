@@ -291,7 +291,6 @@ body {
   cursor: pointer;
   white-space: pre-line;
   padding: .2vw;
-  z-index: 2;
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -322,7 +321,6 @@ body {
   cursor: pointer;
   padding: .2vw;
   object-fit: contain;
-  z-index: 1;
 }
 
 .movingElement {

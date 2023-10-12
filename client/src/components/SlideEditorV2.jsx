@@ -28,7 +28,8 @@ function SlideEditor(props) {
             color: '#' + element.c,
             textAlign: element.a,
             fontStyle: element.fs,
-            fontWeight: element.fw
+            fontWeight: element.fw,
+            zIndex: element.z
           }}
         />
       case 'rect':
@@ -43,7 +44,8 @@ function SlideEditor(props) {
             width: element.w + '%',
             height: element.h + '%',
             backgroundColor: '#' + element.c,
-            borderRadius: element.r + 'vw'
+            borderRadius: element.r + 'vw',
+            zIndex: element.z
           }} />
       case 'img':
         return <img
@@ -58,7 +60,8 @@ function SlideEditor(props) {
             width: element.w + '%',
             height: element.h + '%',
             borderRadius: element.r + 'vw',
-            transform: `scaleX(${element.fx ? -1 : 1}) scaleY(${element.fy ? -1 : 1})`
+            transform: `scaleX(${element.fx ? -1 : 1}) scaleY(${element.fy ? -1 : 1})`,
+            zIndex: element.z
           }} />
     }
   }
