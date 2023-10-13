@@ -768,3 +768,13 @@
 [2023-10-12T18:27:43.247] [INFO] SAVE_PRESENTATION - 6512eb52fd84a5a372e33c42 saved presentation 65207e274b26c846a1e9b9c6
 [2023-10-12T18:28:43.242] [INFO] SAVE_PRESENTATION - 6512eb52fd84a5a372e33c42 saved presentation 65207e274b26c846a1e9b9c6
 [2023-10-12T18:28:48.523] [INFO] SAVE_PRESENTATION - 6512eb52fd84a5a372e33c42 saved presentation 65207e274b26c846a1e9b9c6
+[2023-10-13T12:59:15.951] [ERROR] ERROR - [Startup] MongooseError: The `uri` parameter to `openUri()` must be a string, got "undefined". Make sure the first parameter to `mongoose.connect()` or `mongoose.createConnection()` is a string.
+[2023-10-13T13:03:43.375] [INFO] STARTUP - Server started
+[2023-10-13T13:04:10.650] [INFO] LOGIN - 6512eb52fd84a5a372e33c42 logged in
+[2023-10-13T13:04:11.188] [INFO] LOAD_USER - 6512eb52fd84a5a372e33c42 loaded their data
+[2023-10-13T13:04:29.301] [INFO] LOAD_USER - 6512eb52fd84a5a372e33c42 loaded their data
+[2023-10-13T13:16:04.511] [INFO] LOGIN - 6512eb52fd84a5a372e33c42 logged in
+[2023-10-13T13:16:04.959] [INFO] LOAD_USER - 6512eb52fd84a5a372e33c42 loaded their data
+[2023-10-13T13:17:20.572] [INFO] LOGIN - 6512eb52fd84a5a372e33c42 logged in
+[2023-10-13T13:17:21.014] [INFO] LOAD_USER - 6512eb52fd84a5a372e33c42 loaded their data
+[2023-10-13T13:17:23.317] [INFO] LOAD_USER - 6512eb52fd84a5a372e33c42 loaded their data
