@@ -20,23 +20,21 @@ const MAINFOLDER = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 
 log4js.configure({
   appenders: {
-    //INFO: { type: 'file', filename: 'server.log' },
     INFO_CONSOLE: { type: 'console' },
-    //ERROR: { type: 'file', filename: 'server.log' },
     ERROR_CONSOLE: { type: 'console' },
   },
   categories: {
-    STARTUP: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
-    REGISTER: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
-    LOGIN: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
-    SAVE_PRESENTATION: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
-    LOAD_PRESENTATION: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
-    CREATE_PRESENTATION: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
-    DELETE_PRESENTATION: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
-    LOAD_USER: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
-    CONVERT_IMAGE: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
-    ERROR: { appenders: [/*'ERROR', */'ERROR_CONSOLE'], level: 'error' },
-    default: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' }
+    STARTUP: { appenders: ['INFO_CONSOLE'], level: 'info' },
+    REGISTER: { appenders: ['INFO_CONSOLE'], level: 'info' },
+    LOGIN: { appenders: ['INFO_CONSOLE'], level: 'info' },
+    SAVE_PRESENTATION: { appenders: ['INFO_CONSOLE'], level: 'info' },
+    LOAD_PRESENTATION: { appenders: ['INFO_CONSOLE'], level: 'info' },
+    CREATE_PRESENTATION: { appenders: ['INFO_CONSOLE'], level: 'info' },
+    DELETE_PRESENTATION: { appenders: ['INFO_CONSOLE'], level: 'info' },
+    LOAD_USER: { appenders: ['INFO_CONSOLE'], level: 'info' },
+    CONVERT_IMAGE: { appenders: ['INFO_CONSOLE'], level: 'info' },
+    ERROR: { appenders: ['ERROR_CONSOLE'], level: 'error' },
+    default: { appenders: ['INFO_CONSOLE'], level: 'info' }
   },
 });
 

@@ -24,9 +24,6 @@ function SlideEditor(props) {
       element.classList.remove('editingElement');
       element.removeAttribute('disabled')
     });
-
-    //document.querySelectorAll('.selectedElement').forEach((element) => { element.removeAttribute('disabled') });
-    //document.querySelectorAll('.editingElement').map((element) => { element.removeAttribute('disabled') });
   }
 
   function handleElementSelection(index, clickMethod) {
@@ -47,7 +44,6 @@ function SlideEditor(props) {
         document.querySelector('.editingElement')?.removeAttribute('disabled');
         document.querySelector(`#e${index}`).focus();
       }
-      //convertElementPixelToPercentage(index);
       document.addEventListener('keydown', (e) => {
         console.log('keydonw')
         if (document.querySelector('.selectedElement')) {
@@ -73,20 +69,15 @@ function SlideEditor(props) {
                 break;
             }
           } else if (e.key === 'Delete') {
-            //saveElementModification(index);
             lastSelectedElementIndex = -1;
             console.log('ref at del', getCurrentSlides());
             const slidesAfterDelete = () => {return (slides) => {props.slides}};
-            //console.log(props.slides)
-            //console.log('beforedel', slidesAfterDelete, index)
             console.log(index);
             slidesAfterDelete[props.currentSlide].splice(index, 1);
-            //console.log('afterdel', slidesAfterDelete, index)
             props.setSlides(slidesAfterDelete);
           }
         }
       });
-      //convertElementPixelToPercentage(index);
       document.addEventListener('input', (e) => {
         if (document.querySelector('.editingElement')) {
           const target = document.querySelector('.editingElement');
@@ -96,7 +87,6 @@ function SlideEditor(props) {
           }
           resizeTextareaToFitAllText(target);
         }
-        //convertElementPixelToPercentage(index);
       });
 
     } else {
@@ -105,7 +95,6 @@ function SlideEditor(props) {
       document.querySelector('.editingElement')?.classList.remove('editingElement');
     }
     lastSelectedElementIndex = index;
-    //convertElementPixelToPercentage(index);
   }
 
   function generateElement(element, index) {
