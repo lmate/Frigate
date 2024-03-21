@@ -184,9 +184,9 @@ app.post('/api/user/:userid/presentation/:presentationid/image', auth, async (re
 });
 
 if (process.env.PRODUCTION === 'true') {
-  app.use(express.static(path.join(MAINFOLDER, 'Present')));
+  app.use(express.static(path.join(MAINFOLDER, 'client', 'dist')));
   app.get('*', (req, res) =>{
-    res.sendFile('index.html', {root: path.join(MAINFOLDER, 'Present')});
+    res.sendFile('index.html', {root: path.join(MAINFOLDER, 'client', 'dist')});
   });
 }
 
