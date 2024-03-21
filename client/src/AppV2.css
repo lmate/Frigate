@@ -777,3 +777,12 @@ body {
   cursor: pointer;
   font-size: .7vw;
 }
+
+.Auth>div>p {
+  position: absolute;
+  margin-left: 1.5vw;
+  font-size: .7vw;
+  margin-top: -.4vw;
+  font-weight: 500;
+  color: #d0342c;
+}

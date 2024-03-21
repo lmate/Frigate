@@ -6,6 +6,7 @@ import Logo from '../assets/logo.svg';
 function Auth() {
   const [loginOrRegister, setLoginOrRegister] = useState('login');
   const navigate = useNavigate();
+  const [authResponse, setAuthResponse] = useState('');
 
   // Check if already logged in, if yes, redirect to dashboard
   useEffect(() => {
@@ -26,6 +27,7 @@ function Auth() {
       navigate('/present/dashboard');
     } else {
       console.log(data.res);
+      setAuthResponse(data.res);
     }
   }
 
@@ -41,6 +43,7 @@ function Auth() {
       navigate('/present/dashboard');
     } else {
       console.log(data.res);
+      setAuthResponse(data.res);
     }
   }
 
@@ -50,23 +53,25 @@ function Auth() {
         <img src={Logo} />
         {loginOrRegister === 'login' && (
           <>
+            <p>{authResponse}</p>
             <form onSubmit={handleLogin}>
               <input type="email" name="email" placeholder="Email" required />
               <input type="password" name="password" placeholder="Password" required />
               <button type="submit">Login</button>
             </form><br />
-            <button type="button" onClick={() => setLoginOrRegister('register')}>Register</button>
+            <button type="button" onClick={() => {setLoginOrRegister('register'); setAuthResponse("");}}>Register</button>
           </>
         )}
         {loginOrRegister === 'register' && (
           <>
+            <p>{authResponse}</p>
             <form onSubmit={handleRegister}>
               <input type="email" name="email" placeholder="Email" required />
               <input type="text" name="name" placeholder="First name" required />
               <input type="password" name="password" placeholder="Password" required />
               <button type="submit">Register</button>
             </form><br />
-            <button type="button" onClick={() => setLoginOrRegister('login')}>Login</button>
+            <button type="button" onClick={() => {setLoginOrRegister('login'); setAuthResponse("");}}>Login</button>
           </>
         )}
       </div>
