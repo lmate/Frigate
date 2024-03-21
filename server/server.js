@@ -20,9 +20,9 @@ const MAINFOLDER = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 
 log4js.configure({
   appenders: {
-    INFO: { type: 'file', filename: 'server.log' },
+    //INFO: { type: 'file', filename: 'server.log' },
     INFO_CONSOLE: { type: 'console' },
-    ERROR: { type: 'file', filename: 'server.log' },
+    //ERROR: { type: 'file', filename: 'server.log' },
     ERROR_CONSOLE: { type: 'console' },
   },
   categories: {
@@ -194,7 +194,7 @@ if (process.env.PRODUCTION === 'true') {
 async function startup() {
   try {
     await mongoose.connect(process.env.DB_URL);
-    app.listen(process.env.PRODUCTION === 'true' ? 80 : 3000);
+    app.listen(process.env.PRODUCTION === 'true' ? 3000 : 3000);
     StartupLogger.info(`Server started`);
   } catch (err) {
     ErrorLogger.error(`[Startup] ${err}`);
