@@ -26,17 +26,17 @@ log4js.configure({
     ERROR_CONSOLE: { type: 'console' },
   },
   categories: {
-    STARTUP: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
-    REGISTER: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
-    LOGIN: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
-    SAVE_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
-    LOAD_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
-    CREATE_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
-    DELETE_PRESENTATION: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
-    LOAD_USER: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
-    CONVERT_IMAGE: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' },
-    ERROR: { appenders: ['ERROR', 'ERROR_CONSOLE'], level: 'error' },
-    default: { appenders: ['INFO', 'INFO_CONSOLE'], level: 'info' }
+    STARTUP: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
+    REGISTER: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
+    LOGIN: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
+    SAVE_PRESENTATION: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
+    LOAD_PRESENTATION: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
+    CREATE_PRESENTATION: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
+    DELETE_PRESENTATION: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
+    LOAD_USER: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
+    CONVERT_IMAGE: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' },
+    ERROR: { appenders: [/*'ERROR', */'ERROR_CONSOLE'], level: 'error' },
+    default: { appenders: [/*'INFO', */'INFO_CONSOLE'], level: 'info' }
   },
 });
 
